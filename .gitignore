@@ -8,3 +8,12 @@ playwright-report/
 blob-report/
 dist-playtest/
 dist-artifact/
+
+# L'art depose dans custom/ reste LOCAL.
+# Ce dossier sert a tester des sprites avant de decider : des maquettes, des
+# references, de l'art achete dont la licence n'autorise pas la redistribution.
+# Rien de tout ca n'a a partir dans un depot public par accident.
+# Pour versionner un fichier precis : git add -f src/render/art/custom/<nom>.png
+src/render/art/custom/*
+!src/render/art/custom/.gitkeep
+!src/render/art/custom/README.md

@@ -93,7 +93,14 @@ Deux chemins, selon que tu veuilles toucher au code ou pas.
 remplace la pixel-map de Zeb au demarrage. Aucun code a modifier. Le dossier est
 vide dans le depot, et le chargement est non bloquant : un fichier corrompu ne
 peut pas empecher le jeu de se lancer, il apparait comme un avertissement dans
-la console. Details dans `src/render/art/custom/README.md`.
+la console.
+
+**Le contenu de ce dossier est ignore par git** : ce que tu y deposes reste sur
+ta machine. Il sert a essayer des sprites avant de trancher — maquettes,
+references, art achete dont la licence n'autorise pas la redistribution — et
+rien de tout ca ne doit partir dans un depot public par accident. Pour
+versionner un fichier precis : `git add -f <chemin>`. Details dans
+`src/render/art/custom/README.md`.
 
 **Pixel-maps.** Colle un bloc `PixelArt` dans `src/render/art/plushies.ts`, puis
 `npm run check:art` verifie que la grille est rectangulaire et que chaque

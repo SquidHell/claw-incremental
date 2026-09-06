@@ -25,7 +25,7 @@ npm run dev        # http://localhost:5173
 | `npm run check:art`  | valide les grilles de pixel art et les palettes   |
 | `npm run test`       | test de fumee Playwright sur Chromium mobile      |
 | `npm run check`      | les trois ci-dessus                               |
-| `npm run build:playtest` | assemble la page de playtest (voir plus bas)  |
+| `npm run build:playtest` | assemble la page de playtest et le jeu seul  |
 | `npm run build:atelier`  | assemble l'atelier du casting (voir plus bas) |
 
 ## Jouer
@@ -73,9 +73,15 @@ Autres details qui comptent :
 ## Page de playtest
 
 `npm run build:playtest` compile le jeu avec `VITE_PLAYTEST=1` (ce qui expose
-`window.__claw`, la poignee de telemetrie) puis injecte le bundle dans
-`artifact/template.html`, qui devient `dist-artifact/playtest.html` : une page
-autonome ou le jeu tourne pour de vrai, avec une fiche de releve a cote.
+`window.__claw`, la poignee de telemetrie) puis injecte le bundle dans deux
+templates :
+
+- `artifact/template.html` -> `dist-artifact/playtest.html` : le jeu avec une
+  fiche de releve a cote ;
+- `artifact/jeu.html` -> `dist-artifact/jeu.html` : **le jeu seul**, sans
+  questionnaire ni habillage, qui occupe l'ecran. Le facteur du jeu reste
+  entier ; la page termine avec une mise a l'echelle CSS uniforme quand il
+  reste une marge notable, pour remplir la largeur d'un telephone.
 
 Le template est la source versionnee ; le fichier assemble ne l'est pas. La page
 joint automatiquement les compteurs de la session (parties, gains, pieces,
@@ -195,6 +201,15 @@ tient entiere dans le premier ecran d'un telephone — panneau de commande
 compris, sans quoi le testeur atterrit sur des boutons invisibles qu'il ne peut
 pas atteindre au pouce — et que l'atelier produit bien un patch pour les deux
 fichiers quand on renomme une peluche.
+
+Son test le plus important verifie que **le hit-test suit la mise a l'echelle**.
+Le jeu se met a l'echelle par un facteur entier et les pages hotes finissent la
+mise en page par un `transform: scale()`. Si la conversion ecran -> virtuel
+ignore cette transformation, toutes les touches se decalent, d'autant plus qu'on
+s'eloigne du coin haut-gauche : les boutons deviennent injouables sur telephone
+alors que tout va bien sur un grand ecran. C'est arrive une fois. Depuis,
+`Screen.toVirtual` deduit son facteur du rectangle **reellement rendu**, jamais
+de `this.scale`, et trois tailles de telephone le verrouillent.
 
 Si l'environnement fournit deja un Chromium via `PLAYWRIGHT_BROWSERS_PATH`, la
 config l'utilise tel quel plutot que d'en telecharger un.

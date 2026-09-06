@@ -1,5 +1,5 @@
 /**
- * Assemble la page de playtest : le bundle de jeu compile est injecte dans
+ * Assemble les pages qui embarquent le jeu : le bundle de jeu compile est injecte dans
  * artifact/template.html a la place du marqueur.
  *
  * Le template reste lisible et versionne ; c'est la seule facon de garder la
@@ -25,13 +25,22 @@ if (/^\s*import\s/m.test(bundle)) {
   throw new Error('Le bundle importe un module externe : il ne peut pas etre inline.');
 }
 
-const template = readFileSync(join(root, 'artifact', 'template.html'), 'utf8');
+// Deux pages partagent le meme bundle : la fiche de playtest, et le jeu seul.
+const PAGES = [
+  { template: 'template.html', out: 'playtest.html' },
+  { template: 'jeu.html', out: 'jeu.html' },
+];
 const MARKER = '/*__GAME_BUNDLE__*/';
-if (!template.includes(MARKER)) throw new Error(`Marqueur ${MARKER} absent du template.`);
 
-const out = template.replace(MARKER, () => bundle);
 mkdirSync(join(root, 'dist-artifact'), { recursive: true });
-const outPath = join(root, 'dist-artifact', 'playtest.html');
-writeFileSync(outPath, out);
 
-console.log(`${outPath} — ${(out.length / 1024).toFixed(1)} ko (bundle ${bundleName})`);
+for (const page of PAGES) {
+  const template = readFileSync(join(root, 'artifact', page.template), 'utf8');
+  if (!template.includes(MARKER)) {
+    throw new Error(`Marqueur ${MARKER} absent de ${page.template}.`);
+  }
+  const out = template.replace(MARKER, () => bundle);
+  const outPath = join(root, 'dist-artifact', page.out);
+  writeFileSync(outPath, out);
+  console.log(`${outPath} — ${(out.length / 1024).toFixed(1)} ko (bundle ${bundleName})`);
+}

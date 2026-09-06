@@ -9,8 +9,6 @@ export const VIRTUAL_H = 320;
 export class Screen {
   readonly ctx: CanvasRenderingContext2D;
   scale = 1;
-  private offsetX = 0;
-  private offsetY = 0;
 
   constructor(readonly canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext('2d', { alpha: false });
@@ -37,22 +35,26 @@ export class Screen {
     this.canvas.style.width = `${cssW}px`;
     this.canvas.style.height = `${cssH}px`;
 
-    const rect = this.canvas.getBoundingClientRect();
-    this.offsetX = rect.left;
-    this.offsetY = rect.top;
-
     this.ctx.imageSmoothingEnabled = false;
   };
 
-  /** Coordonnees ecran -> coordonnees virtuelles. */
+  /**
+   * Coordonnees ecran -> coordonnees virtuelles.
+   *
+   * Le facteur est deduit du rectangle REELLEMENT rendu, jamais de `this.scale`.
+   * `getBoundingClientRect()` tient compte des transformations CSS de la page
+   * hote : diviser par le facteur entier alors qu'un `transform: scale()` est
+   * applique decale toutes les touches, de plus en plus loin du coin haut-gauche.
+   * C'est ce qui rendait les boutons injouables des que la page reduisait la
+   * borne pour la faire tenir sur un telephone.
+   */
   toVirtual = (clientX: number, clientY: number): { x: number; y: number } => {
     // Le rect peut bouger (clavier virtuel, barre d'URL mobile) : on relit.
     const rect = this.canvas.getBoundingClientRect();
-    this.offsetX = rect.left;
-    this.offsetY = rect.top;
+    if (rect.width === 0 || rect.height === 0) return { x: -1, y: -1 };
     return {
-      x: (clientX - this.offsetX) / this.scale,
-      y: (clientY - this.offsetY) / this.scale,
+      x: (clientX - rect.left) * (VIRTUAL_W / rect.width),
+      y: (clientY - rect.top) * (VIRTUAL_H / rect.height),
     };
   };
 

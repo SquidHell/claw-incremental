@@ -1,0 +1,133 @@
+<title>CLAW-O-RAMA</title>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Page volontairement monochrome et sans habillage : c'est une borne, pas un
+     document. Elle ne suit donc pas le theme de la visionneuse — un cabinet
+     d'arcade est sombre dans les deux cas. */
+  html,
+  body {
+    height: 100%;
+    background: #0b0713;
+    overscroll-behavior: none;
+  }
+
+  #stage {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #0b0713;
+    /* Le jeu gere lui-meme ses gestes : aucun defilement ni zoom parasite. */
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+  #screen {
+    display: block;
+    image-rendering: pixelated;
+    touch-action: none;
+    transform-origin: center center;
+  }
+
+  #full {
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    z-index: 2;
+    font: 500 11px/1 ui-monospace, 'SF Mono', Menlo, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a99cc4;
+    background: rgba(18, 11, 30, 0.82);
+    border: 1px solid #3a2450;
+    border-radius: 6px;
+    padding: 7px 10px;
+    cursor: pointer;
+  }
+
+  #full:hover {
+    color: #ffffff;
+    border-color: #c22a5f;
+  }
+
+  #full:focus-visible {
+    outline: 2px solid #ff4d5e;
+    outline-offset: 2px;
+  }
+
+  #full[hidden] {
+    display: none;
+  }
+</style>
+
+<div id="stage"><canvas id="screen"></canvas></div>
+<button id="full" type="button" hidden>Plein écran</button>
+
+<script type="module">
+  /*__GAME_BUNDLE__*/
+</script>
+
+<script type="module">
+  const stage = document.getElementById('stage');
+  const screen = document.getElementById('screen');
+  const fullBtn = document.getElementById('full');
+
+  /**
+   * Le jeu se met a l'echelle par un facteur ENTIER, donc il reste toujours une
+   * bordure : sur un telephone de 386 px de large, x2 ne remplit que 360 px.
+   * Quand cette marge est notable, on termine avec une mise a l'echelle CSS
+   * uniforme pour occuper l'ecran.
+   *
+   * C'est sans danger depuis que `toVirtual` deduit son facteur du rectangle
+   * reellement rendu : les touches suivent la transformation. Le rendu reste au
+   * plus proche voisin (`image-rendering: pixelated`), donc net — seule la
+   * largeur des pixels varie de 1 unite ici ou la, invisible a la densite d'un
+   * telephone.
+   */
+  const FILL_THRESHOLD = 1.04;
+
+  function fill() {
+    // La taille posee par le jeu lui-meme, avant toute transformation.
+    const w = parseFloat(screen.style.width) || screen.width;
+    const h = parseFloat(screen.style.height) || screen.height;
+    if (!w || !h) return;
+
+    const grow = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+    screen.style.transform = grow >= FILL_THRESHOLD ? `scale(${grow})` : '';
+  }
+
+  // Le jeu se redimensionne sur `resize` ; on repasse juste apres lui.
+  const refit = () => requestAnimationFrame(fill);
+  window.addEventListener('resize', refit);
+  window.addEventListener('orientationchange', refit);
+  window.visualViewport?.addEventListener('resize', refit);
+  refit();
+
+  // Le plein ecran n'est pas toujours autorise dans un cadre embarque : on
+  // n'affiche le bouton que la ou il fonctionne vraiment.
+  if (document.fullscreenEnabled) {
+    fullBtn.hidden = false;
+    fullBtn.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+      } catch {
+        // Refuse par la politique du cadre : le bouton n'a plus lieu d'etre.
+        fullBtn.hidden = true;
+      }
+    });
+    document.addEventListener('fullscreenchange', () => {
+      fullBtn.textContent = document.fullscreenElement ? 'Quitter' : 'Plein écran';
+      refit();
+    });
+  }
+</script>

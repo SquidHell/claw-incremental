@@ -83,21 +83,51 @@ export function bevel(
   vline(ctx, x + w - 1, y + radius, h - radius * 2, shadow);
 }
 
-/** Trame 50% : sert aux ombres et aux etats grises sans alpha. */
+/**
+ * Trame 50% : sert aux ombres, aux voiles et aux etats grises sans alpha.
+ *
+ * Implementee avec un motif 2x2 mis en cache plutot qu'une double boucle de
+ * fillRect : une grande surface tramee coutait des milliers d'appels par frame
+ * (le fond et la vitre a eux seuls en demandaient ~23 000), ce qui plafonnait
+ * le jeu bien en dessous de 60 fps.
+ */
+const ditherCache = new Map<string, CanvasPattern>();
+
+function ditherPattern(
+  ctx: CanvasRenderingContext2D,
+  color: string,
+  phase: number,
+): CanvasPattern | null {
+  const key = `${color}|${phase & 1}`;
+  const cached = ditherCache.get(key);
+  if (cached) return cached;
+
+  const tile = document.createElement('canvas');
+  tile.width = 2;
+  tile.height = 2;
+  const tileCtx = tile.getContext('2d');
+  if (!tileCtx) return null;
+  tileCtx.fillStyle = color;
+  if ((phase & 1) === 0) {
+    tileCtx.fillRect(0, 0, 1, 1);
+    tileCtx.fillRect(1, 1, 1, 1);
+  } else {
+    tileCtx.fillRect(1, 0, 1, 1);
+    tileCtx.fillRect(0, 1, 1, 1);
+  }
+  const pattern = ctx.createPattern(tile, 'repeat');
+  if (pattern) ditherCache.set(key, pattern);
+  return pattern;
+}
+
 export function dither(
   ctx: CanvasRenderingContext2D,
   r: Rect,
   color: string,
   phase = 0,
 ): void {
-  ctx.fillStyle = color;
-  const x0 = Math.round(r.x);
-  const y0 = Math.round(r.y);
-  const x1 = x0 + Math.round(r.w);
-  const y1 = y0 + Math.round(r.h);
-  for (let y = y0; y < y1; y++) {
-    for (let x = x0 + ((y + phase) % 2); x < x1; x += 2) {
-      ctx.fillRect(x, y, 1, 1);
-    }
-  }
+  const pattern = ditherPattern(ctx, color, phase);
+  if (!pattern) return;
+  ctx.fillStyle = pattern;
+  ctx.fillRect(Math.round(r.x), Math.round(r.y), Math.round(r.w), Math.round(r.h));
 }

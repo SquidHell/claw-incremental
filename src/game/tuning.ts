@@ -9,9 +9,23 @@ export const TUNING = {
   airDrag: 0.02,
   groundFriction: 0.72,
   restitution: 0.08,
-  /** Sous ce seuil de vitesse, un corps peut s'endormir. */
-  sleepSpeed: 3,
+  /**
+   * Sous ce seuil de vitesse, un corps peut s'endormir. Il doit rester au-dessus
+   * de ce que la gravite ajoute en une frame (560/60 = 9.3) : un corps pose
+   * reprend cette vitesse a chaque pas avant que le contact ne la remette a
+   * zero, et un seuil plus bas empecherait la pile de s'endormir.
+   */
+  sleepSpeed: 12,
   sleepDelay: 0.35,
+  /** Deplacement net par pas en dessous duquel un corps est juge immobile. */
+  sleepDrift: 0.12,
+  /**
+   * Profondeur de penetration au-dela de laquelle un contact est considere
+   * comme un vrai choc (et reveille les corps). En dessous, c'est la derive
+   * d'un pixel due a la gravite sur un corps deja pose : la reveiller
+   * empecherait la pile de s'endormir un jour.
+   */
+  contactEpsilon: 0.5,
   /** Fraction minimale de la largeur qui doit reposer sur un appui stable. */
   minSupport: 0.34,
   /** Acceleration de bascule quand l'appui est trop etroit. */

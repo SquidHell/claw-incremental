@@ -139,9 +139,13 @@ export function step(bodies: Body[], dt: number): StepResult {
     }
 
     const speed = Math.abs(b.vx) + Math.abs(b.vy);
+    // On juge l'immobilite sur le DEPLACEMENT NET du pas, pas sur la qualite de
+    // l'appui : un corps coince entre deux voisines n'a presque pas d'appui sous
+    // lui mais ne bouge plus, et doit pouvoir s'endormir.
+    const drift = Math.abs(b.x - b.prevX) + Math.abs(b.y - b.prevY);
     const support = supportInfo(b, bodies);
 
-    if (speed < TUNING.sleepSpeed && support.ratio >= TUNING.minSupport) {
+    if (speed < TUNING.sleepSpeed && drift < TUNING.sleepDrift) {
       b.sleepTimer += dt;
       if (b.sleepTimer >= TUNING.sleepDelay) {
         b.asleep = true;
@@ -156,11 +160,16 @@ export function step(bodies: Body[], dt: number): StepResult {
     // Bascule : sans rotation, une peluche posee sur 2 px de son voisin
     // resterait suspendue en l'air. On la pousse doucement dans le vide, elle
     // glisse et retombe — la pile se tasse au lieu de faire des tours.
+    // Mais seulement si elle a la place de partir : une peluche coincee entre
+    // deux voisines est stable, et la pousser contre un mur la garderait
+    // eveillee a jouer des coudes indefiniment.
     if (support.ratio > 0 && support.ratio < TUNING.minSupport) {
-      const dir = Math.sign(centerX(b) - support.cx) || 1;
-      b.vx += dir * TUNING.topplePush * dt;
-      b.asleep = false;
-      b.sleepTimer = 0;
+      const dir: 1 | -1 = centerX(b) >= support.cx ? 1 : -1;
+      if (!blockedOnSide(b, bodies, dir)) {
+        b.vx += dir * TUNING.topplePush * dt;
+        b.asleep = false;
+        b.sleepTimer = 0;
+      }
     }
   }
 
@@ -233,18 +242,20 @@ function resolvePair(a: Body, b: Body): void {
   if (aFixed && bFixed) return;
 
   if (ov.y < ov.x) {
-    const aOnTop = a.y < b.y;
-    const push = ov.y;
-    if (aOnTop) {
-      a.y -= push * shareA;
-      b.y += push * shareB;
-      if (a.vy > 0) a.vy = 0;
-      if (b.vy < 0) b.vy = 0;
-    } else {
-      a.y += push * shareA;
-      b.y -= push * shareB;
-      if (a.vy < 0) a.vy = 0;
-      if (b.vy > 0) b.vy = 0;
+    // Correction ASYMETRIQUE : c'est la peluche du dessus qui remonte, jamais
+    // celle du dessous. Partager la correction enfoncerait la peluche du bas
+    // dans le sol, qui la renverrait aussitot — la pile oscillerait sans jamais
+    // converger, donc sans jamais s'endormir. Combine au tri du bas vers le
+    // haut, une passe suffit ici.
+    const top = a.y < b.y ? a : b;
+    const bottom = top === a ? b : a;
+    if (!top.asleep) {
+      top.y -= ov.y;
+      if (top.vy > 0) top.vy = 0;
+      if (bottom.vy < 0) bottom.vy = 0;
+    } else if (!bottom.asleep) {
+      bottom.y += ov.y;
+      if (bottom.vy < 0) bottom.vy = 0;
     }
     // Friction laterale : les peluches empilees ne patinent pas.
     a.vx *= 0.9;
@@ -263,8 +274,13 @@ function resolvePair(a: Body, b: Body): void {
     b.vx *= 0.6;
   }
 
-  if (!aFixed) wake(a);
-  if (!bFixed) wake(b);
+  // On ne reveille que sur un vrai choc. Sans ce seuil, la derive d'un pixel
+  // que la gravite reintroduit a chaque frame sur un corps deja pose relancerait
+  // le compteur de sommeil en permanence, et la pile ne s'endormirait jamais.
+  if (Math.min(ov.x, ov.y) > TUNING.contactEpsilon) {
+    if (!aFixed) wake(a);
+    if (!bFixed) wake(b);
+  }
 }
 
 interface Support {
@@ -315,6 +331,25 @@ function supportInfo(b: Body, bodies: Body[]): Support {
   flush();
 
   return { ratio: total / b.w, cx: total > 0 ? weighted / total : centerX(b) };
+}
+
+/** Y a-t-il un mur ou une peluche juste a cote, du cote `dir` ? */
+function blockedOnSide(b: Body, bodies: Body[], dir: 1 | -1): boolean {
+  if (dir > 0 && b.x + b.w >= PLAY.right - 0.5) return true;
+  if (dir < 0 && b.x <= PLAY.left + 0.5) return true;
+
+  const probe: Rect = {
+    x: dir > 0 ? b.x + b.w : b.x - 2,
+    y: b.y + 2,
+    w: 2,
+    h: b.h - 4,
+  };
+  if (dir < 0 && rectsOverlap(probe, CHUTE_LIP)) return true;
+  for (const other of bodies) {
+    if (other === b || other.held) continue;
+    if (rectsOverlap(probe, bodyRect(other))) return true;
+  }
+  return false;
 }
 
 /**

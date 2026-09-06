@@ -115,8 +115,8 @@ template, donc les peluches proposees ne derivent jamais du code.
 
 ## Les peluches
 
-Huit mascottes : Plombax, Vroomz, Ectoblob, Slimu, Rozalind, Chevalor,
-Dragonz et Superstarr.
+Huit mascottes : Plombax, Vroomz, Kartono, Voltik, Rozalind, Kapsul,
+Dragonz et Minipince.
 
 **Ce sont des creations originales.** Elles evoquent des *archetypes* du genre
 (le plombier moustachu, la creature rapide, la princesse, le fantome, le

@@ -4,8 +4,8 @@ Depose ici un PNG par peluche, nomme d'apres sa cle de sprite :
 
 ```
 custom/plombax.png   custom/vroomz.png   custom/rozalind.png
-custom/ectoblob.png  custom/chevalor.png  custom/slimu.png
-custom/dragonz.png   custom/superstarr.png
+custom/kartono.png   custom/kapsul.png    custom/voltik.png
+custom/dragonz.png   custom/minipince.png
 ```
 
 Au demarrage, chaque PNG trouve **remplace** la pixel-map correspondante de

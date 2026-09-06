@@ -24,9 +24,21 @@ const report = (msg) => {
 for (const file of readdirSync(artDir).filter((f) => f.endsWith('.ts'))) {
   const source = readFileSync(join(artDir, file), 'utf8');
   const { code } = await transform(source, { loader: 'ts', format: 'esm' });
-  const mod = await import(
-    `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
-  );
+
+  // Les modules d'art sont des donnees pures : ils s'importent depuis une data:
+  // URL, sans resolution de chemin. Un module qui depend d'autre chose echoue
+  // ici — et le message doit dire quoi faire, pas cracher une pile Node.
+  let mod;
+  try {
+    mod = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
+  } catch (err) {
+    console.error(`${file}`);
+    report(
+      `ce module importe autre chose que des types (${err.input ?? err.message}). ` +
+        `src/render/art/ ne contient que des pixel-maps : deplace la logique ailleurs.`,
+    );
+    continue;
+  }
 
   console.log(`${file}`);
   for (const [name, art] of Object.entries(mod)) {

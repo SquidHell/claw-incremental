@@ -26,6 +26,7 @@ npm run dev        # http://localhost:5173
 | `npm run test`       | test de fumee Playwright sur Chromium mobile      |
 | `npm run check`      | les trois ci-dessus                               |
 | `npm run build:playtest` | assemble la page de playtest (voir plus bas)  |
+| `npm run build:atelier`  | assemble l'atelier de sprites (voir plus bas) |
 
 ## Jouer
 
@@ -83,6 +84,27 @@ l'identique.
 
 La commande utilise la syntaxe POSIX pour la variable d'environnement ; sous
 Windows, lancer les deux etapes separement.
+
+## Ton art a toi
+
+Deux chemins, selon que tu veuilles toucher au code ou pas.
+
+**PNG deposes.** Mets un `zeb.png` de 20x20 dans `src/render/art/custom/` et il
+remplace la pixel-map de Zeb au demarrage. Aucun code a modifier. Le dossier est
+vide dans le depot, et le chargement est non bloquant : un fichier corrompu ne
+peut pas empecher le jeu de se lancer, il apparait comme un avertissement dans
+la console. Details dans `src/render/art/custom/README.md`.
+
+**Pixel-maps.** Colle un bloc `PixelArt` dans `src/render/art/plushies.ts`, puis
+`npm run check:art` verifie que la grille est rectangulaire et que chaque
+caractere existe dans la palette.
+
+`npm run build:atelier` assemble l'**atelier de sprites** : une page ou l'on
+dessine une peluche 20x20 (crayon, gomme, pot, pipette, annulation), ou l'on
+importe n'importe quelle image comme point de depart, et d'ou l'on repart avec
+l'un ou l'autre format — le bloc `PixelArt` a coller, ou le PNG a deposer. Elle
+part toujours de l'art reel du depot : le script injecte `PLUSH_ART` dans le
+template, donc les peluches proposees ne derivent jamais du code.
 
 ## Les peluches
 

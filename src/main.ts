@@ -7,6 +7,7 @@ import { Input, isTextEntry } from './core/input.ts';
 import { startLoop } from './core/loop.ts';
 import { on } from './core/events.ts';
 import { haptic, setHapticsEnabled } from './core/haptics.ts';
+import { loadCustomArt } from './render/custom-art.ts';
 import { Machine, type Phase } from './game/machine.ts';
 import { loadState, saveState } from './game/state.ts';
 import { BTN_DROP, BTN_LEFT, BTN_RIGHT, MARQUEE } from './game/cabinet.ts';
@@ -41,6 +42,13 @@ const screen = new Screen(canvas);
 const ctx = screen.ctx;
 const input = new Input(canvas, screen.toVirtual);
 const sprites = buildSprites();
+
+// Art perso : les PNG de src/render/art/custom/ se substituent aux pixel-maps
+// des qu'ils sont decodes. Non bloquant — le jeu tourne deja.
+void loadCustomArt(sprites.plushies).then(({ applied, warnings }) => {
+  if (applied.length) console.info(`[claw] art perso applique : ${applied.join(', ')}`);
+  for (const warning of warnings) console.warn(`[claw] ${warning}`);
+});
 const state = loadState();
 const machine = new Machine(state);
 const fx = new Fx();

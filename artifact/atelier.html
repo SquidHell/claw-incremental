@@ -1,0 +1,1442 @@
+<title>Atelier de peluches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen&display=swap"
+/>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Memes jetons que le banc d'essai : les deux pages sont le meme produit. */
+  :root {
+    --ground: #f4f1fa;
+    --panel: #ffffff;
+    --panel-2: #ebe6f4;
+    --ink: #1b1330;
+    --ink-2: #574a75;
+    --ink-3: #8579a6;
+    --line: #ded6ee;
+    --line-strong: #c6bade;
+    --accent: #b32453;
+    --gold: #a8730a;
+    --gold-bg: #fcf1d6;
+    --teal: #10736d;
+    --warn: #a2560c;
+    --glass: #2a1b46;
+    --floor: #3f2a6b;
+    --shadow: 0 1px 2px rgba(27, 19, 48, 0.06), 0 8px 24px -12px rgba(27, 19, 48, 0.18);
+    --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --font-pixel: 'Silkscreen', 'Courier New', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --ground: #0f0a1b;
+      --panel: #181026;
+      --panel-2: #211634;
+      --ink: #f3effb;
+      --ink-2: #b6a8d2;
+      --ink-3: #8878a8;
+      --line: #2b2040;
+      --line-strong: #3d2f58;
+      --accent: #ec5a89;
+      --gold: #ffd94a;
+      --gold-bg: #2f2408;
+      --teal: #45ded0;
+      --warn: #f0a44a;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --ground: #0f0a1b;
+    --panel: #181026;
+    --panel-2: #211634;
+    --ink: #f3effb;
+    --ink-2: #b6a8d2;
+    --ink-3: #8878a8;
+    --line: #2b2040;
+    --line-strong: #3d2f58;
+    --accent: #ec5a89;
+    --gold: #ffd94a;
+    --gold-bg: #2f2408;
+    --teal: #45ded0;
+    --warn: #f0a44a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 26px;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(28px, 4.6vw, 40px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    max-width: 64ch;
+    color: var(--ink-2);
+  }
+
+  .lede code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--panel-2);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  @media (max-width: 940px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* --- fiches --------------------------------------------------------- */
+
+  .sheet {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .sheet + .sheet {
+    margin-top: 20px;
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+  }
+
+  .sheet-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .sheet-head .eyebrow {
+    font-size: 10px;
+  }
+
+  .sheet-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* --- barre d'outils -------------------------------------------------- */
+
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tool,
+  .ghost {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--ink-2);
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 7px 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tool:hover,
+  .ghost:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .tool[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  :root[data-theme='dark'] .tool[aria-pressed='true'] {
+    color: #200613;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .tool[aria-pressed='true'] {
+      color: #200613;
+    }
+  }
+
+  .tool:disabled,
+  .ghost:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* --- grille de dessin ------------------------------------------------ */
+
+  .board {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1;
+    background: var(--glass);
+    border-radius: 8px;
+    image-rendering: pixelated;
+    touch-action: none;
+    cursor: crosshair;
+  }
+
+  .board-note {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+
+  /* --- palette ---------------------------------------------------------- */
+
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
+    border: 2px solid var(--line-strong);
+    cursor: pointer;
+    position: relative;
+    display: grid;
+    place-items: end center;
+    padding-bottom: 2px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+  }
+
+  .swatch[aria-pressed='true'] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .swatch.is-empty {
+    background: repeating-conic-gradient(var(--line) 0% 25%, var(--panel) 0% 50%) 50% / 12px 12px;
+    color: var(--ink-3);
+    text-shadow: none;
+  }
+
+  .swatch-add {
+    background: var(--panel);
+    color: var(--ink-3);
+    text-shadow: none;
+    font-size: 18px;
+    place-items: center;
+    padding: 0;
+  }
+
+  .palette-edit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .palette-edit input[type='color'] {
+    width: 44px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+  }
+
+  /* --- champs ----------------------------------------------------------- */
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .row > .field {
+    flex: 1 1 150px;
+  }
+
+  input[type='text'] {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 8px 10px;
+    width: 100%;
+  }
+
+  .hint {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.45;
+  }
+
+  /* --- apercu ----------------------------------------------------------- */
+
+  .previews {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .preview canvas {
+    image-rendering: pixelated;
+    background: var(--glass);
+    border-radius: 4px;
+  }
+
+  .preview span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+  }
+
+  .shelf-strip {
+    background: var(--floor);
+    border-radius: 8px;
+    padding: 10px 8px 8px;
+    overflow-x: auto;
+  }
+
+  .shelf-strip canvas {
+    image-rendering: pixelated;
+    display: block;
+  }
+
+  /* --- actions ---------------------------------------------------------- */
+
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 7px;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+
+  :root[data-theme='dark'] .btn {
+    color: #200613;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .btn {
+      color: #200613;
+    }
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .status {
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status.is-good {
+    color: var(--teal);
+  }
+
+  .status.is-warn {
+    color: var(--warn);
+  }
+
+  pre.export {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    color: var(--ink-2);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* --- etagere ---------------------------------------------------------- */
+
+  .shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 10px;
+  }
+
+  .shelf-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 6px;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .shelf-item:hover {
+    border-color: var(--accent);
+  }
+
+  .shelf-item canvas {
+    image-rendering: pixelated;
+    background: var(--glass);
+    border-radius: 4px;
+  }
+
+  .shelf-item b {
+    font-weight: 600;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .shelf-item span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+  }
+
+  .empty {
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  .starters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .starter {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px 5px 5px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  .starter:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .starter canvas {
+    image-rendering: pixelated;
+    background: var(--glass);
+    border-radius: 50%;
+  }
+
+  footer {
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    max-width: 72ch;
+  }
+
+  footer a {
+    color: var(--accent);
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">CLAW-O-RAMA &middot; outillage</p>
+    <h1>Atelier de peluches</h1>
+    <p class="lede">
+      Dessine une peluche 20&nbsp;&times;&nbsp;20, ou importe n'importe quelle image
+      comme point de départ. Tu repars avec le bloc <code>PixelArt</code> à coller dans
+      <code>src/render/art/plushies.ts</code>, ou un PNG à déposer dans
+      <code>src/render/art/custom/</code> — où il remplace la peluche d'origine au
+      démarrage, sans toucher une ligne de code.
+    </p>
+  </header>
+
+  <div class="grid">
+    <div>
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Grille</h2>
+          <p class="eyebrow" id="grid-note">20 × 20</p>
+        </div>
+        <div class="sheet-body">
+          <div class="tools" id="tools"></div>
+          <canvas class="board" id="board" width="400" height="400"></canvas>
+          <div class="board-note">
+            <span id="cursor-note">—</span>
+            <span id="used-note">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Palette</h2>
+          <p class="eyebrow">Une lettre par couleur</p>
+        </div>
+        <div class="sheet-body">
+          <div class="swatches" id="swatches"></div>
+          <div class="palette-edit">
+            <label for="color-input">Couleur sélectionnée</label>
+            <input type="color" id="color-input" value="#3aa7e8" />
+            <code class="hint" id="color-hex">#3aa7e8</code>
+            <button class="ghost" id="remove-color" type="button">Retirer de la palette</button>
+          </div>
+          <p class="hint">
+            Le point <code>.</code> est toujours le transparent. Le format du jeu tient
+            en une palette lettre&rarr;couleur et vingt lignes de vingt caractères.
+          </p>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Partir de</h2>
+          <p class="eyebrow">L'art actuel du dépôt</p>
+        </div>
+        <div class="sheet-body">
+          <div class="starters" id="starters"></div>
+          <p class="hint">
+            Charger une peluche écrase la grille en cours. Ton brouillon est gardé dans
+            ce navigateur entre deux visites.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Aperçu</h2>
+          <p class="eyebrow">Sur le fond de la vitrine</p>
+        </div>
+        <div class="sheet-body">
+          <div class="previews">
+            <div class="preview"><canvas id="p1" width="20" height="20"></canvas><span>1×</span></div>
+            <div class="preview"><canvas id="p2" width="40" height="40"></canvas><span>2×</span></div>
+            <div class="preview"><canvas id="p4" width="80" height="80"></canvas><span>4×</span></div>
+          </div>
+          <div class="shelf-strip">
+            <canvas id="lineup" width="360" height="48"></canvas>
+          </div>
+          <p class="hint">
+            La rangée du bas montre ta peluche au milieu des autres, à la taille où le
+            joueur la verra vraiment&nbsp;: 20&nbsp;px dans une vitrine de 152.
+          </p>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Sortie</h2>
+          <p class="eyebrow" id="out-note">—</p>
+        </div>
+        <div class="sheet-body">
+          <div class="row">
+            <div class="field">
+              <label for="name">Nom de la peluche</label>
+              <input type="text" id="name" maxlength="24" value="Zeb" />
+            </div>
+            <div class="field">
+              <label for="key">Clé de sprite</label>
+              <input type="text" id="key" maxlength="24" value="zeb" />
+            </div>
+          </div>
+          <p class="hint">
+            La clé sert au nom du <code>const</code> exporté et au nom de fichier PNG.
+            Lettres et chiffres uniquement.
+          </p>
+          <div class="tools">
+            <button class="btn" id="copy-ts" type="button">Copier le bloc PixelArt</button>
+            <button class="ghost" id="save-png" type="button">Télécharger le PNG</button>
+            <button class="ghost" id="shelve" type="button">Poser sur l'étagère</button>
+          </div>
+          <p class="status" id="status"></p>
+          <pre class="export" id="export"></pre>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2>Étagère partagée</h2>
+          <p class="eyebrow" id="shelf-note">—</p>
+        </div>
+        <div class="sheet-body">
+          <p class="empty" id="shelf-empty">
+            Les peluches posées ici sont visibles par tous ceux qui ouvrent l'atelier.
+            Clique sur l'une d'elles pour la reprendre dans la grille.
+          </p>
+          <div class="shelf" id="shelf" hidden></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    Le format d'export est exactement celui de <code>plushies.ts</code>&nbsp;:
+    <code>npm run check:art</code> vérifie que la grille est rectangulaire et que chaque
+    caractère existe dans la palette. Ce que tu dessines ou importes ici t'appartient et
+    ne quitte pas cet artefact&nbsp;— sauf si tu le poses sur l'étagère partagée.
+  </footer>
+</div>
+
+<script type="module">
+  const SEED = /*__SEED__*/null;
+
+  const SIZE = 20;
+  const EMPTY = '.';
+  // Reserve de lettres pour les nouvelles couleurs, dans l'ordre d'attribution.
+  const CHAR_POOL = 'KWBRGYPOMTNCSAVEFHIJLQUXZ';
+  const GLASS = '#2a1b46';
+  const FLOOR = '#3f2a6b';
+
+  const el = (id) => document.getElementById(id);
+
+  // --- etat -------------------------------------------------------------
+  let rows = SEED[1].art.rows.slice();
+  let palette = Object.entries(SEED[1].art.palette).map(([char, color]) => ({ char, color }));
+  let selected = palette[0]?.char ?? EMPTY;
+  let tool = 'pencil';
+  const undoStack = [];
+
+  function snapshot() {
+    undoStack.push({ rows: rows.slice(), palette: palette.map((p) => ({ ...p })) });
+    if (undoStack.length > 60) undoStack.shift();
+    el('undo').disabled = false;
+  }
+
+  function setCell(x, y, char) {
+    if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
+    const row = rows[y];
+    if (row[x] === char) return;
+    rows[y] = row.slice(0, x) + char + row.slice(x + 1);
+  }
+
+  const colorOf = (char) => palette.find((p) => p.char === char)?.color ?? null;
+
+  // --- rendu de la grille ------------------------------------------------
+  const board = el('board');
+  const bctx = board.getContext('2d');
+
+  function paintBoard() {
+    const cell = board.width / SIZE;
+    bctx.fillStyle = GLASS;
+    bctx.fillRect(0, 0, board.width, board.height);
+
+    for (let y = 0; y < SIZE; y++) {
+      for (let x = 0; x < SIZE; x++) {
+        const char = rows[y][x];
+        if (char === EMPTY) continue;
+        bctx.fillStyle = colorOf(char) ?? '#ff00ff';
+        bctx.fillRect(x * cell, y * cell, cell, cell);
+      }
+    }
+
+    // Quadrillage : fin partout, marque tous les 5 pour se reperer.
+    bctx.lineWidth = 1;
+    for (let i = 0; i <= SIZE; i++) {
+      bctx.strokeStyle = i % 5 === 0 ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.09)';
+      const p = Math.round(i * cell) + 0.5;
+      bctx.beginPath();
+      bctx.moveTo(p, 0);
+      bctx.lineTo(p, board.height);
+      bctx.moveTo(0, p);
+      bctx.lineTo(board.width, p);
+      bctx.stroke();
+    }
+  }
+
+  // --- apercus ------------------------------------------------------------
+  function drawSpriteInto(ctx, zoom, ox = 0, oy = 0) {
+    for (let y = 0; y < SIZE; y++) {
+      for (let x = 0; x < SIZE; x++) {
+        const char = rows[y][x];
+        if (char === EMPTY) continue;
+        ctx.fillStyle = colorOf(char) ?? '#ff00ff';
+        ctx.fillRect(ox + x * zoom, oy + y * zoom, zoom, zoom);
+      }
+    }
+  }
+
+  function artInto(ctx, art, zoom, ox, oy) {
+    for (let y = 0; y < art.rows.length; y++) {
+      for (let x = 0; x < art.rows[y].length; x++) {
+        const char = art.rows[y][x];
+        if (char === EMPTY || char === ' ') continue;
+        ctx.fillStyle = art.palette[char] ?? '#ff00ff';
+        ctx.fillRect(ox + x * zoom, oy + y * zoom, zoom, zoom);
+      }
+    }
+  }
+
+  function paintPreviews() {
+    for (const [id, zoom] of [['p1', 1], ['p2', 2], ['p4', 4]]) {
+      const c = el(id);
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = GLASS;
+      ctx.fillRect(0, 0, c.width, c.height);
+      drawSpriteInto(ctx, zoom);
+    }
+
+    // La rangee : ta peluche au milieu de trois autres, taille reelle x2.
+    const line = el('lineup');
+    const ctx = line.getContext('2d');
+    ctx.clearRect(0, 0, line.width, line.height);
+    ctx.fillStyle = FLOOR;
+    ctx.fillRect(0, 0, line.width, line.height);
+    ctx.fillStyle = 'rgba(255,255,255,0.14)';
+    ctx.fillRect(0, line.height - 4, line.width, 1);
+
+    const slots = [SEED[0], SEED[3], null, SEED[5], SEED[7], SEED[2]];
+    const zoom = 2;
+    const step = 40 + 10;
+    let x = 8;
+    for (const slot of slots) {
+      const oy = line.height - 4 - SIZE * zoom;
+      if (slot === null) drawSpriteInto(ctx, zoom, x, oy);
+      else artInto(ctx, slot.art, zoom, x, oy);
+      x += step;
+    }
+  }
+
+  // --- palette -------------------------------------------------------------
+  function nextChar() {
+    const used = new Set(palette.map((p) => p.char));
+    for (const c of CHAR_POOL) if (!used.has(c)) return c;
+    return null;
+  }
+
+  function paintSwatches() {
+    const host = el('swatches');
+    host.replaceChildren();
+
+    const eraser = document.createElement('button');
+    eraser.type = 'button';
+    eraser.className = 'swatch is-empty';
+    eraser.textContent = '.';
+    eraser.title = 'Transparent';
+    eraser.setAttribute('aria-pressed', String(selected === EMPTY));
+    eraser.setAttribute('aria-label', 'Transparent');
+    eraser.addEventListener('click', () => {
+      selected = EMPTY;
+      tool = 'pencil';
+      syncAll();
+    });
+    host.appendChild(eraser);
+
+    for (const entry of palette) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'swatch';
+      b.style.background = entry.color;
+      b.textContent = entry.char;
+      b.title = `${entry.char} — ${entry.color}`;
+      b.setAttribute('aria-pressed', String(selected === entry.char));
+      b.setAttribute('aria-label', `Couleur ${entry.char}, ${entry.color}`);
+      // Encre sombre sur une pastille claire, sinon la lettre disparait.
+      const ink = readableInk(entry.color);
+      b.style.color = ink;
+      if (ink !== '#ffffff') b.style.textShadow = 'none';
+      b.addEventListener('click', () => {
+        selected = entry.char;
+        tool = 'pencil';
+        syncAll();
+      });
+      host.appendChild(b);
+    }
+
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'swatch swatch-add';
+    add.textContent = '+';
+    add.title = 'Ajouter une couleur';
+    add.setAttribute('aria-label', 'Ajouter une couleur');
+    add.addEventListener('click', () => {
+      const char = nextChar();
+      if (!char) {
+        setStatus('Palette pleine : 25 couleurs, c’est déjà beaucoup pour 20 × 20.', 'warn');
+        return;
+      }
+      snapshot();
+      palette.push({ char, color: '#ffffff' });
+      selected = char;
+      tool = 'pencil';
+      syncAll();
+    });
+    host.appendChild(add);
+
+    const current = colorOf(selected);
+    el('color-input').disabled = current === null;
+    el('remove-color').disabled = current === null;
+    if (current) {
+      el('color-input').value = current;
+      el('color-hex').textContent = current;
+    } else {
+      el('color-hex').textContent = 'transparent';
+    }
+  }
+
+  el('color-input').addEventListener('input', (ev) => {
+    const entry = palette.find((p) => p.char === selected);
+    if (!entry) return;
+    entry.color = ev.target.value;
+    el('color-hex').textContent = entry.color;
+    paintBoard();
+    paintPreviews();
+    paintSwatches();
+    writeExport();
+    saveDraft();
+  });
+
+  el('remove-color').addEventListener('click', () => {
+    const idx = palette.findIndex((p) => p.char === selected);
+    if (idx === -1) return;
+    snapshot();
+    const char = palette[idx].char;
+    palette.splice(idx, 1);
+    // Les pixels orphelins redeviennent transparents.
+    rows = rows.map((row) => row.split('').map((c) => (c === char ? EMPTY : c)).join(''));
+    selected = palette[0]?.char ?? EMPTY;
+    syncAll();
+  });
+
+  // --- outils ---------------------------------------------------------------
+  const TOOLS = [
+    { id: 'pencil', label: 'Crayon' },
+    { id: 'eraser', label: 'Gomme' },
+    { id: 'fill', label: 'Pot' },
+    { id: 'pick', label: 'Pipette' },
+  ];
+
+  const toolbar = el('tools');
+  for (const t of TOOLS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tool';
+    b.dataset.tool = t.id;
+    b.textContent = t.label;
+    b.addEventListener('click', () => {
+      tool = t.id;
+      syncAll();
+    });
+    toolbar.appendChild(b);
+  }
+
+  const undoBtn = document.createElement('button');
+  undoBtn.type = 'button';
+  undoBtn.className = 'ghost';
+  undoBtn.id = 'undo';
+  undoBtn.textContent = 'Annuler';
+  undoBtn.disabled = true;
+  undoBtn.addEventListener('click', () => {
+    const prev = undoStack.pop();
+    if (!prev) return;
+    rows = prev.rows;
+    palette = prev.palette;
+    if (!palette.some((p) => p.char === selected)) selected = palette[0]?.char ?? EMPTY;
+    undoBtn.disabled = undoStack.length === 0;
+    syncAll();
+  });
+  toolbar.appendChild(undoBtn);
+
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'ghost';
+  clearBtn.textContent = 'Vider';
+  clearBtn.addEventListener('click', () => {
+    snapshot();
+    rows = Array.from({ length: SIZE }, () => EMPTY.repeat(SIZE));
+    syncAll();
+  });
+  toolbar.appendChild(clearBtn);
+
+  const importLabel = document.createElement('label');
+  importLabel.className = 'ghost';
+  importLabel.textContent = 'Importer une image';
+  const importInput = document.createElement('input');
+  importInput.type = 'file';
+  importInput.accept = 'image/*';
+  importInput.hidden = true;
+  importLabel.appendChild(importInput);
+  toolbar.appendChild(importLabel);
+
+  function syncTools() {
+    for (const b of toolbar.querySelectorAll('.tool')) {
+      b.setAttribute('aria-pressed', String(b.dataset.tool === tool));
+    }
+  }
+
+  // --- dessin ----------------------------------------------------------------
+  function cellAt(ev) {
+    const rect = board.getBoundingClientRect();
+    const x = Math.floor(((ev.clientX - rect.left) / rect.width) * SIZE);
+    const y = Math.floor(((ev.clientY - rect.top) / rect.height) * SIZE);
+    return { x, y };
+  }
+
+  function floodFill(sx, sy, target, replacement) {
+    if (target === replacement) return;
+    const queue = [[sx, sy]];
+    const seen = new Set();
+    while (queue.length) {
+      const [x, y] = queue.pop();
+      if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) continue;
+      const key = y * SIZE + x;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (rows[y][x] !== target) continue;
+      setCell(x, y, replacement);
+      queue.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+    }
+  }
+
+  let painting = false;
+
+  function applyAt(ev, isStart) {
+    const { x, y } = cellAt(ev);
+    if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
+
+    if (tool === 'pick') {
+      const char = rows[y][x];
+      selected = char;
+      tool = 'pencil';
+      syncAll();
+      return;
+    }
+    if (tool === 'fill') {
+      if (!isStart) return;
+      snapshot();
+      // Pour remplir en transparent, on choisit la pastille « . ».
+      floodFill(x, y, rows[y][x], selected);
+      syncAll();
+      return;
+    }
+    setCell(x, y, tool === 'eraser' ? EMPTY : selected);
+    paintBoard();
+    paintPreviews();
+  }
+
+  board.addEventListener('pointerdown', (ev) => {
+    ev.preventDefault();
+    board.setPointerCapture(ev.pointerId);
+    if (tool === 'pencil' || tool === 'eraser') snapshot();
+    painting = true;
+    applyAt(ev, true);
+  });
+
+  board.addEventListener('pointermove', (ev) => {
+    const { x, y } = cellAt(ev);
+    el('cursor-note').textContent =
+      x >= 0 && y >= 0 && x < SIZE && y < SIZE ? `x ${x} · y ${y}` : '—';
+    if (!painting) return;
+    ev.preventDefault();
+    applyAt(ev, false);
+  });
+
+  const stopPainting = () => {
+    if (!painting) return;
+    painting = false;
+    writeExport();
+    updateUsed();
+    saveDraft();
+  };
+  board.addEventListener('pointerup', stopPainting);
+  board.addEventListener('pointercancel', stopPainting);
+  board.addEventListener('pointerleave', () => {
+    el('cursor-note').textContent = '—';
+    stopPainting();
+  });
+
+  // --- import d'image ----------------------------------------------------------
+  importInput.addEventListener('change', async () => {
+    const file = importInput.files?.[0];
+    if (!file) return;
+    importInput.value = '';
+    try {
+      const bitmap = await createImageBitmap(file);
+      const c = document.createElement('canvas');
+      c.width = SIZE;
+      c.height = SIZE;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.imageSmoothingEnabled = false;
+      // Recadrage carre au centre, puis reduction au plus proche voisin.
+      const side = Math.min(bitmap.width, bitmap.height);
+      const sx = (bitmap.width - side) / 2;
+      const sy = (bitmap.height - side) / 2;
+      ctx.drawImage(bitmap, sx, sy, side, side, 0, 0, SIZE, SIZE);
+      const data = ctx.getImageData(0, 0, SIZE, SIZE).data;
+
+      snapshot();
+      const built = [];
+      const nextRows = [];
+      for (let y = 0; y < SIZE; y++) {
+        let line = '';
+        for (let x = 0; x < SIZE; x++) {
+          const i = (y * SIZE + x) * 4;
+          if (data[i + 3] < 128) {
+            line += EMPTY;
+            continue;
+          }
+          const hex = rgbToHex(data[i], data[i + 1], data[i + 2]);
+          line += charFor(hex, built);
+        }
+        nextRows.push(line);
+      }
+      rows = nextRows;
+      palette = built;
+      selected = palette[0]?.char ?? EMPTY;
+      syncAll();
+      setStatus(
+        `Image importée et réduite à 20 × 20 en ${palette.length} couleurs. ` +
+          `Retouche-la à la main : une réduction automatique ne fait jamais du bon pixel art.`,
+        'good',
+      );
+    } catch {
+      setStatus('Cette image n’a pas pu être lue.', 'warn');
+    }
+  });
+
+  /** Noir ou blanc, selon la luminance percue de la pastille. */
+  function readableInk(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex)) return '#ffffff';
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? '#1b1330' : '#ffffff';
+  }
+
+  const rgbToHex = (r, g, b) =>
+    '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
+
+  const MAX_COLORS = 16;
+
+  /** Rend la lettre de `hex`, en creant l'entree ou en prenant la plus proche. */
+  function charFor(hex, built) {
+    const found = built.find((p) => p.color === hex);
+    if (found) return found.char;
+    if (built.length < MAX_COLORS) {
+      const used = new Set(built.map((p) => p.char));
+      const char = [...CHAR_POOL].find((c) => !used.has(c));
+      if (char) {
+        built.push({ char, color: hex });
+        return char;
+      }
+    }
+    // Palette pleine : on rabat sur la couleur la plus proche.
+    let best = built[0];
+    let bestD = Infinity;
+    for (const p of built) {
+      const d = colorDistance(p.color, hex);
+      if (d < bestD) {
+        bestD = d;
+        best = p;
+      }
+    }
+    return best ? best.char : EMPTY;
+  }
+
+  function colorDistance(a, b) {
+    const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+    const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+    return (pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2 + (pa[2] - pb[2]) ** 2;
+  }
+
+  // --- sortie -------------------------------------------------------------------
+  const sanitizeKey = (raw) => (raw.replace(/[^A-Za-z0-9]/g, '') || 'peluche');
+
+  function usedChars() {
+    const used = new Set();
+    for (const row of rows) for (const c of row) if (c !== EMPTY) used.add(c);
+    return used;
+  }
+
+  function updateUsed() {
+    const used = usedChars();
+    const unused = palette.filter((p) => !used.has(p.char));
+    el('used-note').textContent =
+      `${used.size} couleur${used.size > 1 ? 's' : ''} utilisée${used.size > 1 ? 's' : ''}` +
+      (unused.length ? ` · ${unused.length} inutilisée${unused.length > 1 ? 's' : ''}` : '');
+  }
+
+  function exportTs() {
+    const key = sanitizeKey(el('key').value);
+    const name = el('name').value.trim() || key;
+    const used = usedChars();
+    const entries = palette.filter((p) => used.has(p.char));
+    const paletteLines = entries.map((p) => `    ${p.char}: '${p.color}',`).join('\n');
+    const rowLines = rows.map((r) => `    '${r}',`).join('\n');
+    return (
+      `/** ${name} */\n` +
+      `export const ${key}: PixelArt = {\n` +
+      `  palette: {\n${paletteLines}\n  },\n` +
+      `  rows: [\n${rowLines}\n  ],\n};\n`
+    );
+  }
+
+  function writeExport() {
+    el('export').textContent = exportTs();
+    const used = usedChars();
+    el('out-note').textContent = `${used.size} couleurs · ${SIZE} × ${SIZE}`;
+    updateUsed();
+  }
+
+  function setStatus(text, kind = '') {
+    const s = el('status');
+    s.textContent = text;
+    s.className = `status${kind ? ` is-${kind}` : ''}`;
+  }
+
+  el('copy-ts').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(exportTs());
+      setStatus('Bloc copié. Colle-le dans src/render/art/plushies.ts.', 'good');
+    } catch {
+      setStatus('Copie refusée par le navigateur — sélectionne le bloc ci-dessous.', 'warn');
+    }
+  });
+
+  for (const id of ['name', 'key']) {
+    el(id).addEventListener('input', () => {
+      writeExport();
+      saveDraft();
+    });
+  }
+
+  // --- PNG ------------------------------------------------------------------------
+  function toPngBlob() {
+    const c = document.createElement('canvas');
+    c.width = SIZE;
+    c.height = SIZE;
+    const ctx = c.getContext('2d');
+    drawSpriteInto(ctx, 1);
+    return new Promise((resolve) => c.toBlob(resolve, 'image/png'));
+  }
+
+  let downloads = null;
+  const saveBtn = el('save-png');
+  saveBtn.disabled = true;
+
+  saveBtn.addEventListener('click', async () => {
+    if (!downloads) return;
+    const blob = await toPngBlob();
+    if (!blob) return;
+    try {
+      const res = await downloads.save({
+        filename: `${sanitizeKey(el('key').value)}.png`,
+        data: blob,
+      });
+      if (res.status === 'saved') {
+        setStatus('PNG enregistré. Dépose-le dans src/render/art/custom/.', 'good');
+      }
+    } catch (e) {
+      if (e?.code === 'cancelled') return;
+      setStatus('Le téléchargement n’a pas abouti.', 'warn');
+    }
+  });
+
+  // --- etagere partagee --------------------------------------------------------------
+  let db = null;
+  const shelveBtn = el('shelve');
+  shelveBtn.disabled = true;
+
+  shelveBtn.addEventListener('click', async () => {
+    if (!db) return;
+    const used = usedChars();
+    if (used.size === 0) {
+      setStatus('La grille est vide.', 'warn');
+      return;
+    }
+    shelveBtn.disabled = true;
+    try {
+      await db.collection('shelf').add({
+        name: el('name').value.trim() || sanitizeKey(el('key').value),
+        key: sanitizeKey(el('key').value),
+        rows: rows.slice(),
+        palette: Object.fromEntries(
+          palette.filter((p) => used.has(p.char)).map((p) => [p.char, p.color]),
+        ),
+        createdAt: new Date().toISOString(),
+      });
+      setStatus('Posée sur l’étagère.', 'good');
+    } catch (e) {
+      setStatus(
+        e?.code === 'quota_exceeded'
+          ? 'L’étagère est pleine.'
+          : 'La peluche n’est pas partie. Réessaie.',
+        'warn',
+      );
+    } finally {
+      shelveBtn.disabled = false;
+    }
+  });
+
+  function renderShelf(items) {
+    const host = el('shelf');
+    const empty = el('shelf-empty');
+    el('shelf-note').textContent = items.length
+      ? `${items.length} peluche${items.length > 1 ? 's' : ''}`
+      : 'Vide';
+    if (!items.length) {
+      empty.hidden = false;
+      host.hidden = true;
+      return;
+    }
+    empty.hidden = true;
+    host.hidden = false;
+    host.replaceChildren();
+
+    for (const item of items) {
+      if (!Array.isArray(item.rows) || item.rows.length !== SIZE) continue;
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'shelf-item';
+
+      const c = document.createElement('canvas');
+      c.width = c.height = 60;
+      artInto(c.getContext('2d'), { rows: item.rows, palette: item.palette ?? {} }, 3, 0, 0);
+      const label = document.createElement('b');
+      label.textContent = String(item.name ?? '—').slice(0, 24);
+      const key = document.createElement('span');
+      key.textContent = String(item.key ?? '').slice(0, 24);
+      card.append(c, label, key);
+
+      card.addEventListener('click', () => {
+        snapshot();
+        rows = item.rows.slice();
+        palette = Object.entries(item.palette ?? {}).map(([char, color]) => ({ char, color }));
+        selected = palette[0]?.char ?? EMPTY;
+        el('name').value = String(item.name ?? '');
+        el('key').value = String(item.key ?? '');
+        syncAll();
+        setStatus(`« ${item.name} » reprise dans la grille.`, 'good');
+      });
+
+      host.appendChild(card);
+    }
+  }
+
+  // --- points de depart -------------------------------------------------------------
+  const starterHost = el('starters');
+  for (const entry of SEED) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'starter';
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    artInto(c.getContext('2d'), entry.art, 1.6, 0, 0);
+    const label = document.createElement('span');
+    label.textContent = entry.name;
+    b.append(c, label);
+    b.addEventListener('click', () => {
+      snapshot();
+      rows = entry.art.rows.slice();
+      palette = Object.entries(entry.art.palette).map(([char, color]) => ({ char, color }));
+      selected = palette[0]?.char ?? EMPTY;
+      el('name').value = entry.name;
+      el('key').value = entry.key;
+      syncAll();
+      setStatus(`« ${entry.name} » chargée. Elle est à toi.`, 'good');
+    });
+    starterHost.appendChild(b);
+  }
+
+  // --- brouillon local ------------------------------------------------------------
+  const DRAFT_KEY = 'claw-atelier:draft';
+
+  function saveDraft() {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({
+          rows,
+          palette,
+          name: el('name').value,
+          key: el('key').value,
+        }),
+      );
+    } catch {
+      /* stockage bloque : on continue sans brouillon */
+    }
+  }
+
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return false;
+      const draft = JSON.parse(raw);
+      if (!Array.isArray(draft.rows) || draft.rows.length !== SIZE) return false;
+      if (draft.rows.some((r) => typeof r !== 'string' || r.length !== SIZE)) return false;
+      rows = draft.rows;
+      palette = Array.isArray(draft.palette) ? draft.palette : [];
+      selected = palette[0]?.char ?? EMPTY;
+      if (draft.name) el('name').value = draft.name;
+      if (draft.key) el('key').value = draft.key;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // --- boucle de synchro -------------------------------------------------------------
+  function syncAll() {
+    paintBoard();
+    paintPreviews();
+    paintSwatches();
+    syncTools();
+    writeExport();
+    saveDraft();
+  }
+
+  loadDraft();
+  syncAll();
+  setStatus('');
+
+  // Les capacites arrivent apres le premier tour de script : la page marche sans.
+  if (window.claude?.use) {
+    window.claude.use('downloads').then((cap) => {
+      downloads = cap;
+      saveBtn.disabled = !cap;
+    });
+
+    window.claude.use('db').then((store) => {
+      if (!store) {
+        renderShelf([]);
+        el('shelf-note').textContent = 'Indisponible ici';
+        return;
+      }
+      db = store;
+      shelveBtn.disabled = false;
+      store
+        .collection('shelf')
+        .orderBy('createdAt', 'desc')
+        .limit(60)
+        .onSnapshot(
+          (snap) => renderShelf(snap.docs.map((d) => d.data() ?? {})),
+          () => {
+            el('shelf-note').textContent = 'Rafraîchissement interrompu';
+          },
+        );
+    });
+  } else {
+    renderShelf([]);
+    el('shelf-note').textContent = 'Indisponible ici';
+  }
+</script>

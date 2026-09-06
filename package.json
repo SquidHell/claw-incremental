@@ -12,7 +12,8 @@
     "check:art": "node scripts/check-art.mjs",
     "test": "playwright test",
     "check": "npm run typecheck && npm run check:art && npm run test",
-    "build:playtest": "VITE_PLAYTEST=1 vite build --outDir dist-playtest && node scripts/build-artifact.mjs"
+    "build:playtest": "VITE_PLAYTEST=1 vite build --outDir dist-playtest && node scripts/build-artifact.mjs",
+    "build:atelier": "node scripts/build-atelier.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",

@@ -69,10 +69,21 @@ export function tinted(sprite: Sprite, color: string): Sprite {
   return { canvas, w: sprite.w, h: sprite.h };
 }
 
+/** Charge un PNG entier comme un seul sprite. */
+export async function spriteFromUrl(url: string): Promise<Sprite> {
+  const img = new Image();
+  img.src = url;
+  await img.decode();
+  const canvas = makeCanvas(img.naturalWidth, img.naturalHeight);
+  const ctx = canvas.getContext('2d')!;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, 0, 0);
+  return { canvas, w: img.naturalWidth, h: img.naturalHeight };
+}
+
 /**
- * Chemin de secours pour du vrai art : decoupe une feuille PNG en frames de
- * taille fixe. Non utilise par le proto, mais c'est le point d'entree prevu
- * pour remplacer les pixel-maps sans toucher au rendu.
+ * Decoupe une feuille PNG en frames de taille fixe. Point d'entree pour une
+ * planche de sprites complete, sans toucher au code de rendu.
  */
 export async function loadSheet(
   url: string,

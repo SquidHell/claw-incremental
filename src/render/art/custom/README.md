@@ -3,8 +3,9 @@
 Depose ici un PNG par peluche, nomme d'apres sa cle de sprite :
 
 ```
-custom/pim.png   custom/zeb.png   custom/elira.png   custom/blip.png
-custom/sirCube.png   custom/gloop.png   custom/draka.png   custom/aurex.png
+custom/plombax.png   custom/vroomz.png   custom/rozalind.png
+custom/ectoblob.png  custom/chevalor.png  custom/slimu.png
+custom/dragonz.png   custom/superstarr.png
 ```
 
 Au demarrage, chaque PNG trouve **remplace** la pixel-map correspondante de
@@ -29,7 +30,7 @@ redistribution. Rien de tout ca n'a a partir dans un depot public par accident.
 Pour versionner un fichier precis, quand tu sais que tu en as le droit :
 
 ```
-git add -f src/render/art/custom/zeb.png
+git add -f src/render/art/custom/vroomz.png
 ```
 
 Pour fabriquer ces PNG, l'atelier de sprites publie avec le proto exporte soit

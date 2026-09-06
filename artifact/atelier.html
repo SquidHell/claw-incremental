@@ -654,11 +654,11 @@
           <div class="row">
             <div class="field">
               <label for="name">Nom de la peluche</label>
-              <input type="text" id="name" maxlength="24" value="Zeb" />
+              <input type="text" id="name" maxlength="24" />
             </div>
             <div class="field">
               <label for="key">Clé de sprite</label>
-              <input type="text" id="key" maxlength="24" value="zeb" />
+              <input type="text" id="key" maxlength="24" />
             </div>
           </div>
           <p class="hint">
@@ -712,8 +712,11 @@
   const el = (id) => document.getElementById(id);
 
   // --- etat -------------------------------------------------------------
-  let rows = SEED[1].art.rows.slice();
-  let palette = Object.entries(SEED[1].art.palette).map(([char, color]) => ({ char, color }));
+  // On part de la deuxieme peluche du catalogue, quelle qu'elle soit : le nom et
+  // la cle suivent, donc un renommage dans le depot ne laisse rien de perime ici.
+  const START = SEED[1];
+  let rows = START.art.rows.slice();
+  let palette = Object.entries(START.art.palette).map(([char, color]) => ({ char, color }));
   let selected = palette[0]?.char ?? EMPTY;
   let tool = 'pencil';
   const undoStack = [];
@@ -1405,6 +1408,8 @@
     saveDraft();
   }
 
+  el('name').value = START.name;
+  el('key').value = START.key;
   loadDraft();
   syncAll();
   setStatus('');

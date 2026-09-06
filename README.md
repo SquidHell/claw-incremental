@@ -89,8 +89,8 @@ Windows, lancer les deux etapes separement.
 
 Deux chemins, selon que tu veuilles toucher au code ou pas.
 
-**PNG deposes.** Mets un `zeb.png` de 20x20 dans `src/render/art/custom/` et il
-remplace la pixel-map de Zeb au demarrage. Aucun code a modifier. Le dossier est
+**PNG deposes.** Mets un `vroomz.png` de 20x20 dans `src/render/art/custom/` et il
+remplace la pixel-map de Vroomz au demarrage. Aucun code a modifier. Le dossier est
 vide dans le depot, et le chargement est non bloquant : un fichier corrompu ne
 peut pas empecher le jeu de se lancer, il apparait comme un avertissement dans
 la console.
@@ -115,7 +115,8 @@ template, donc les peluches proposees ne derivent jamais du code.
 
 ## Les peluches
 
-Huit mascottes : Pim, Zeb, Blip, Gloop, Elira, Sir Cube, Draka et Aurex.
+Huit mascottes : Plombax, Vroomz, Ectoblob, Slimu, Rozalind, Chevalor,
+Dragonz et Superstarr.
 
 **Ce sont des creations originales.** Elles evoquent des *archetypes* du genre
 (le plombier moustachu, la creature rapide, la princesse, le fantome, le

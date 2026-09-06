@@ -115,6 +115,9 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  .lede-block {
     padding-bottom: 22px;
     border-bottom: 1px solid var(--line);
     margin-bottom: 26px;
@@ -158,9 +161,47 @@
   }
 
   @media (max-width: 900px) {
+    /* La borne doit tenir ENTIERE dans le premier ecran, boutons compris. On
+       remonte donc le jeu juste sous le titre et on renvoie le chapeau apres :
+       un testeur qui atterrit ici doit pouvoir jouer sans rien chercher. */
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-top: 18px;
+    }
+
     .grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 26px;
+      display: contents;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    .masthead {
+      order: 1;
+      gap: 4px;
+    }
+
+    .bay {
+      order: 2;
+    }
+
+    .lede-block {
+      order: 3;
+      padding-bottom: 0;
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .log {
+      order: 4;
+    }
+
+    footer {
+      order: 5;
+      margin-top: 0;
     }
   }
 
@@ -698,13 +739,14 @@
   <header class="masthead">
     <p class="eyebrow">Banc d'essai &middot; proto 0.1 &middot; 8 peluches</p>
     <h1>CLAW-O-RAMA</h1>
-    <p class="lede">
-      Le prototype tourne pour de vrai ci-dessous&nbsp;: joue quelques parties, puis
-      remplis le relevé. Ce qui nous intéresse le plus&nbsp;:
-      <strong>est-ce que tu comprends pourquoi tu perds une peluche&nbsp;?</strong>
-      La prise n'est pas un tirage au sort — elle glisse, et ça doit se voir.
-    </p>
   </header>
+
+  <p class="lede lede-block">
+    Le prototype tourne pour de vrai&nbsp;: joue quelques parties, puis remplis le
+    relevé. Ce qui nous intéresse le plus&nbsp;:
+    <strong>est-ce que tu comprends pourquoi tu perds une peluche&nbsp;?</strong>
+    La prise n'est pas un tirage au sort — elle glisse, et ça doit se voir.
+  </p>
 
   <div class="grid">
     <section class="bay" aria-label="La borne">
@@ -845,18 +887,30 @@
   const BOX_W = 360;
   const BOX_H = 640;
 
+  const compact = () => window.matchMedia('(max-width: 900px)').matches;
+
   function fitStage() {
+    const viewportH = window.visualViewport?.height ?? window.innerHeight;
+
+    // Sur telephone on mesure vraiment ou commence la borne, pour lui donner
+    // tout ce qui reste sous le titre. Sur grand ecran elle est collante : une
+    // fois defilee, elle dispose de la hauteur entiere.
+    const topUsed = compact() ? bayFit.getBoundingClientRect().top + window.scrollY : 40;
+    const BOTTOM_ALLOWANCE = 64; // legende + respiration
     const availW = bayFit.clientWidth;
-    const availH = Math.max(360, window.innerHeight - 150);
+    const availH = Math.max(320, viewportH - topUsed - BOTTOM_ALLOWANCE);
+
     const fit = Math.min(1, availW / BOX_W, availH / BOX_H);
     stage.style.transform = fit < 1 ? `scale(${fit})` : '';
     bayFit.style.height = `${Math.round(BOX_H * fit)}px`;
-    scaleNote.textContent = `180 × 320 · x2`;
+    scaleNote.textContent = '180 × 320 · x2';
   }
 
   fitStage();
   window.addEventListener('resize', fitStage);
   window.addEventListener('orientationchange', fitStage);
+  // La barre d'adresse mobile fait varier la hauteur utile sans evenement resize.
+  window.visualViewport?.addEventListener('resize', fitStage);
 
   // --- compteurs de la partie ------------------------------------------
   const SCALE_KEYS = ['feel', 'clarity', 'replay'];

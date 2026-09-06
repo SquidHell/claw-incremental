@@ -26,7 +26,7 @@ npm run dev        # http://localhost:5173
 | `npm run test`       | test de fumee Playwright sur Chromium mobile      |
 | `npm run check`      | les trois ci-dessus                               |
 | `npm run build:playtest` | assemble la page de playtest (voir plus bas)  |
-| `npm run build:atelier`  | assemble l'atelier de sprites (voir plus bas) |
+| `npm run build:atelier`  | assemble l'atelier du casting (voir plus bas) |
 
 ## Jouer
 
@@ -106,12 +106,20 @@ versionner un fichier precis : `git add -f <chemin>`. Details dans
 `npm run check:art` verifie que la grille est rectangulaire et que chaque
 caractere existe dans la palette.
 
-`npm run build:atelier` assemble l'**atelier de sprites** : une page ou l'on
-dessine une peluche 20x20 (crayon, gomme, pot, pipette, annulation), ou l'on
-importe n'importe quelle image comme point de depart, et d'ou l'on repart avec
-l'un ou l'autre format — le bloc `PixelArt` a coller, ou le PNG a deposer. Elle
-part toujours de l'art reel du depot : le script injecte `PLUSH_ART` dans le
-template, donc les peluches proposees ne derivent jamais du code.
+`npm run build:atelier` assemble l'**atelier du casting** : une page qui edite
+les huit peluches existantes — le dessin (crayon, gomme, pot, pipette,
+annulation, import d'image) mais aussi le **nom** et la **description**. Elle
+signale d'un coup d'oeil ce qui s'ecarte du depot, et produit un patch pret a
+coller : le bloc `PixelArt` pour `plushies.ts`, et les lignes `name` / `blurb` /
+`sprite` pour `prizes.ts` quand l'identite a change. Une peluche peut aussi
+etre enregistree pour l'equipe, ou ramenee a son etat d'origine.
+
+La rarete, la valeur et les caracteristiques physiques restent hors de
+l'atelier : les toucher demanderait de reequilibrer le jeu, ce qui n'est pas un
+geste d'editeur graphique.
+
+Le script injecte `PLUSH_ART` et le catalogue dans le template, donc l'atelier
+ne derive jamais du code reel.
 
 ## Les peluches
 
@@ -172,11 +180,21 @@ Le proto ne contient **aucune** mecanique d'idle, mais la structure l'attend :
 
 ## Tests
 
-Le test de fumee Playwright pilote la vraie page avec de vrais evenements
-pointer, sur un viewport telephone en portrait. Il verifie la mise a l'echelle
-entiere, l'absence de defilement, le maintien et le relachement des boutons, le
+`tests/smoke.spec.ts` pilote la vraie page avec de vrais evenements pointer, sur
+un viewport telephone en portrait. Il verifie la mise a l'echelle entiere,
+l'absence de defilement, le maintien et le relachement des boutons, le
 glissement hors bouton, le cycle complet de la pince, le blocage des entrees
-hors phase `READY`, et un gain reel jusqu'a la carte de recompense.
+hors phase `READY`, qu'un champ de saisie voisin garde ses touches, et un gain
+reel jusqu'a la carte de recompense.
+
+`tests/artifact.spec.ts` couvre les deux pages publiees. Il les **assemble**
+avant de les charger, pour tester ce qui partirait vraiment en ligne, et les
+enveloppe comme le fait la visionneuse d'artefacts (sans `box-sizing` global,
+ce qui a deja casse une mise en page). Il verifie que la borne du banc d'essai
+tient entiere dans le premier ecran d'un telephone — panneau de commande
+compris, sans quoi le testeur atterrit sur des boutons invisibles qu'il ne peut
+pas atteindre au pouce — et que l'atelier produit bien un patch pour les deux
+fichiers quand on renomme une peluche.
 
 Si l'environnement fournit deja un Chromium via `PLAYWRIGHT_BROWSERS_PATH`, la
 config l'utilise tel quel plutot que d'en telecharger un.

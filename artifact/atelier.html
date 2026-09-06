@@ -468,83 +468,7 @@
 
   /* --- etagere ---------------------------------------------------------- */
 
-  .shelf {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-    gap: 10px;
-  }
-
-  .shelf-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 9px 6px;
-    background: var(--ground);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-  }
-
-  .shelf-item:hover {
-    border-color: var(--accent);
-  }
-
-  .shelf-item canvas {
-    image-rendering: pixelated;
-    background: var(--glass);
-    border-radius: 4px;
-  }
-
-  .shelf-item b {
-    font-weight: 600;
-    text-align: center;
-    overflow-wrap: anywhere;
-  }
-
-  .shelf-item span {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--ink-3);
-  }
-
-  .empty {
-    font-size: 13px;
-    color: var(--ink-3);
-  }
-
-  .starters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .starter {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 5px 10px 5px 5px;
-    background: var(--panel);
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 12.5px;
-    color: var(--ink-2);
-  }
-
-  .starter:hover {
-    border-color: var(--accent);
-    color: var(--ink);
-  }
-
-  .starter canvas {
-    image-rendering: pixelated;
-    background: var(--glass);
-    border-radius: 50%;
-  }
-
-  footer {
+                        footer {
     margin-top: 34px;
     padding-top: 18px;
     border-top: 1px solid var(--line);
@@ -556,18 +480,138 @@
   footer a {
     color: var(--accent);
   }
+
+  /* --- casting ---------------------------------------------------------- */
+
+  .roster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 8px;
+  }
+
+  .roster-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px 7px;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .roster-card:hover {
+    border-color: var(--accent);
+  }
+
+  .roster-card[aria-pressed='true'] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    background: var(--panel);
+  }
+
+  .roster-card canvas {
+    image-rendering: pixelated;
+    background: var(--glass);
+    border-radius: 4px;
+  }
+
+  .roster-card b {
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+  }
+
+  .roster-card .rarity {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* Pastille « modifie » : l'ecart avec le depot doit se voir d'un coup d'oeil. */
+  .roster-card .dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .roster-card .dot[hidden] {
+    display: none;
+  }
+
+  .team-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--ink-3);
+    padding: 9px 11px;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--panel-2);
+    color: var(--ink-2);
+  }
+
+  .badge.is-on {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  :root[data-theme='dark'] .badge.is-on {
+    color: #200613;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .badge.is-on {
+      color: #200613;
+    }
+  }
+
+  textarea {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 8px 10px;
+    width: 100%;
+    resize: vertical;
+    min-height: 58px;
+    line-height: 1.45;
+  }
 </style>
 
 <div class="wrap">
   <header class="masthead">
     <p class="eyebrow">CLAW-O-RAMA &middot; outillage</p>
-    <h1>Atelier de peluches</h1>
+    <h1>Atelier du casting</h1>
     <p class="lede">
-      Dessine une peluche 20&nbsp;&times;&nbsp;20, ou importe n'importe quelle image
-      comme point de départ. Tu repars avec le bloc <code>PixelArt</code> à coller dans
-      <code>src/render/art/plushies.ts</code>, ou un PNG à déposer dans
-      <code>src/render/art/custom/</code> — où il remplace la peluche d'origine au
-      démarrage, sans toucher une ligne de code.
+      Les huit peluches de la machine, modifiables&nbsp;: le dessin, le nom, la
+      description. Choisis-en une, retouche-la, et repars avec le patch à coller dans
+      <code>plushies.ts</code> et <code>prizes.ts</code> — ou le PNG à déposer dans
+      <code>src/render/art/custom/</code>, où il remplace le dessin sans toucher au code.
     </p>
   </header>
 
@@ -575,8 +619,22 @@
     <div>
       <section class="sheet">
         <div class="sheet-head">
-          <h2>Grille</h2>
-          <p class="eyebrow" id="grid-note">20 × 20</p>
+          <h2>Casting</h2>
+          <p class="eyebrow" id="roster-note">—</p>
+        </div>
+        <div class="sheet-body">
+          <div class="roster" id="roster"></div>
+          <p class="hint">
+            La pastille signale un écart avec l'état du dépôt. Ton travail est gardé dans
+            ce navigateur, peluche par peluche.
+          </p>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
+          <h2 id="grid-title">Grille</h2>
+          <p class="eyebrow">20 × 20</p>
         </div>
         <div class="sheet-body">
           <div class="tools" id="tools"></div>
@@ -602,22 +660,8 @@
             <button class="ghost" id="remove-color" type="button">Retirer de la palette</button>
           </div>
           <p class="hint">
-            Le point <code>.</code> est toujours le transparent. Le format du jeu tient
-            en une palette lettre&rarr;couleur et vingt lignes de vingt caractères.
-          </p>
-        </div>
-      </section>
-
-      <section class="sheet">
-        <div class="sheet-head">
-          <h2>Partir de</h2>
-          <p class="eyebrow">L'art actuel du dépôt</p>
-        </div>
-        <div class="sheet-body">
-          <div class="starters" id="starters"></div>
-          <p class="hint">
-            Charger une peluche écrase la grille en cours. Ton brouillon est gardé dans
-            ce navigateur entre deux visites.
+            Le point <code>.</code> est toujours le transparent. Le format du jeu tient en
+            une palette lettre&rarr;couleur et vingt lignes de vingt caractères.
           </p>
         </div>
       </section>
@@ -626,8 +670,45 @@
     <div>
       <section class="sheet">
         <div class="sheet-head">
+          <h2>Identité</h2>
+          <p class="eyebrow" id="identity-note">—</p>
+        </div>
+        <div class="sheet-body">
+          <div class="row">
+            <div class="field">
+              <label for="name">Nom affiché</label>
+              <input type="text" id="name" maxlength="24" />
+            </div>
+            <div class="field">
+              <label for="key">Clé de sprite</label>
+              <input type="text" id="key" maxlength="24" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="blurb">Description sur la carte de gain</label>
+            <textarea id="blurb" maxlength="90"></textarea>
+            <span class="hint">
+              Deux lignes maximum sur la carte. La rareté, la valeur et les
+              caractéristiques physiques restent dans <code>prizes.ts</code>&nbsp;: les
+              toucher demanderait de rééquilibrer le jeu.
+            </span>
+          </div>
+          <div class="team-line" id="team-line">
+            <span id="team-text">Version de l'équipe&nbsp;: aucune</span>
+            <button class="ghost" id="load-team" type="button" hidden>Charger</button>
+          </div>
+          <div class="tools">
+            <button class="ghost" id="save-team" type="button">Enregistrer pour l'équipe</button>
+            <button class="ghost" id="reset-one" type="button">Revenir à l'original</button>
+          </div>
+          <p class="status" id="status"></p>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="sheet-head">
           <h2>Aperçu</h2>
-          <p class="eyebrow">Sur le fond de la vitrine</p>
+          <p class="eyebrow">Dans la vitrine</p>
         </div>
         <div class="sheet-body">
           <div class="previews">
@@ -636,66 +717,41 @@
             <div class="preview"><canvas id="p4" width="80" height="80"></canvas><span>4×</span></div>
           </div>
           <div class="shelf-strip">
-            <canvas id="lineup" width="360" height="48"></canvas>
+            <canvas id="lineup" width="372" height="48"></canvas>
           </div>
           <p class="hint">
-            La rangée du bas montre ta peluche au milieu des autres, à la taille où le
-            joueur la verra vraiment&nbsp;: 20&nbsp;px dans une vitrine de 152.
+            La rangée montre les huit peluches telles que tu les as laissées, à la taille
+            où le joueur les verra vraiment&nbsp;: 20&nbsp;px dans une vitrine de 152.
           </p>
         </div>
       </section>
 
       <section class="sheet">
         <div class="sheet-head">
-          <h2>Sortie</h2>
+          <h2>Patch</h2>
           <p class="eyebrow" id="out-note">—</p>
         </div>
         <div class="sheet-body">
-          <div class="row">
-            <div class="field">
-              <label for="name">Nom de la peluche</label>
-              <input type="text" id="name" maxlength="24" />
-            </div>
-            <div class="field">
-              <label for="key">Clé de sprite</label>
-              <input type="text" id="key" maxlength="24" />
-            </div>
-          </div>
-          <p class="hint">
-            La clé sert au nom du <code>const</code> exporté et au nom de fichier PNG.
-            Lettres et chiffres uniquement.
-          </p>
           <div class="tools">
-            <button class="btn" id="copy-ts" type="button">Copier le bloc PixelArt</button>
+            <button class="btn" id="copy-one" type="button">Copier ce patch</button>
+            <button class="ghost" id="copy-all" type="button">Copier tout le casting</button>
             <button class="ghost" id="save-png" type="button">Télécharger le PNG</button>
-            <button class="ghost" id="shelve" type="button">Poser sur l'étagère</button>
+            <label class="ghost">
+              Importer une image
+              <input type="file" id="import" accept="image/*" hidden />
+            </label>
           </div>
-          <p class="status" id="status"></p>
           <pre class="export" id="export"></pre>
-        </div>
-      </section>
-
-      <section class="sheet">
-        <div class="sheet-head">
-          <h2>Étagère partagée</h2>
-          <p class="eyebrow" id="shelf-note">—</p>
-        </div>
-        <div class="sheet-body">
-          <p class="empty" id="shelf-empty">
-            Les peluches posées ici sont visibles par tous ceux qui ouvrent l'atelier.
-            Clique sur l'une d'elles pour la reprendre dans la grille.
-          </p>
-          <div class="shelf" id="shelf" hidden></div>
         </div>
       </section>
     </div>
   </div>
 
   <footer>
-    Le format d'export est exactement celui de <code>plushies.ts</code>&nbsp;:
-    <code>npm run check:art</code> vérifie que la grille est rectangulaire et que chaque
-    caractère existe dans la palette. Ce que tu dessines ou importes ici t'appartient et
-    ne quitte pas cet artefact&nbsp;— sauf si tu le poses sur l'étagère partagée.
+    Le format d'export est exactement celui du dépôt&nbsp;: <code>npm run check:art</code>
+    vérifie que la grille est rectangulaire et que chaque caractère existe dans la
+    palette. Ce que tu dessines ou importes ici t'appartient et ne quitte pas cet
+    artefact&nbsp;— sauf si tu l'enregistres pour l'équipe.
   </footer>
 </div>
 
@@ -704,57 +760,96 @@
 
   const SIZE = 20;
   const EMPTY = '.';
-  // Reserve de lettres pour les nouvelles couleurs, dans l'ordre d'attribution.
   const CHAR_POOL = 'KWBRGYPOMTNCSAVEFHIJLQUXZ';
+  const MAX_IMPORT_COLORS = 16;
   const GLASS = '#2a1b46';
   const FLOOR = '#3f2a6b';
+  const DRAFT_KEY = 'claw-atelier:casting';
 
   const el = (id) => document.getElementById(id);
 
-  // --- etat -------------------------------------------------------------
-  // On part de la deuxieme peluche du catalogue, quelle qu'elle soit : le nom et
-  // la cle suivent, donc un renommage dans le depot ne laisse rien de perime ici.
-  const START = SEED[1];
-  let rows = START.art.rows.slice();
-  let palette = Object.entries(START.art.palette).map(([char, color]) => ({ char, color }));
-  let selected = palette[0]?.char ?? EMPTY;
+  // --- etat -----------------------------------------------------------------
+  // ORIGINALS = l'etat du depot, jamais modifie : c'est la reference qui permet
+  // de dire « modifie » et de revenir en arriere.
+  const ORIGINALS = new Map(SEED.map((e) => [e.id, e]));
+  /** id -> { name, key, blurb, rows, palette } */
+  const edits = new Map();
+  /** id -> version enregistree par l'equipe */
+  const team = new Map();
+
+  let currentId = SEED[0].id;
+  let selected = EMPTY;
   let tool = 'pencil';
   const undoStack = [];
 
+  const cloneOriginal = (entry) => ({
+    name: entry.name,
+    key: entry.key,
+    blurb: entry.blurb,
+    rows: entry.art.rows.slice(),
+    palette: Object.entries(entry.art.palette).map(([char, color]) => ({ char, color })),
+  });
+
+  /** Copie de travail de la peluche courante, creee a la demande. */
+  function work(id = currentId) {
+    let w = edits.get(id);
+    if (!w) {
+      w = cloneOriginal(ORIGINALS.get(id));
+      edits.set(id, w);
+    }
+    return w;
+  }
+
+  function isModified(id) {
+    const w = edits.get(id);
+    if (!w) return false;
+    const o = ORIGINALS.get(id);
+    if (w.name !== o.name || w.blurb !== o.blurb || w.key !== o.key) return true;
+    if (w.rows.join('|') !== o.art.rows.join('|')) return true;
+    const op = Object.entries(o.art.palette);
+    if (w.palette.length !== op.length) return true;
+    return w.palette.some((p, i) => p.char !== op[i][0] || p.color !== op[i][1]);
+  }
+
+  const modifiedIds = () => SEED.map((e) => e.id).filter(isModified);
+  const colorOf = (char, w = work()) => w.palette.find((p) => p.char === char)?.color ?? null;
+
   function snapshot() {
-    undoStack.push({ rows: rows.slice(), palette: palette.map((p) => ({ ...p })) });
+    const w = work();
+    undoStack.push({
+      id: currentId,
+      rows: w.rows.slice(),
+      palette: w.palette.map((p) => ({ ...p })),
+    });
     if (undoStack.length > 60) undoStack.shift();
     el('undo').disabled = false;
   }
 
   function setCell(x, y, char) {
     if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
-    const row = rows[y];
+    const w = work();
+    const row = w.rows[y];
     if (row[x] === char) return;
-    rows[y] = row.slice(0, x) + char + row.slice(x + 1);
+    w.rows[y] = row.slice(0, x) + char + row.slice(x + 1);
   }
 
-  const colorOf = (char) => palette.find((p) => p.char === char)?.color ?? null;
-
-  // --- rendu de la grille ------------------------------------------------
+  // --- dessin de la grille ---------------------------------------------------
   const board = el('board');
   const bctx = board.getContext('2d');
 
   function paintBoard() {
+    const w = work();
     const cell = board.width / SIZE;
     bctx.fillStyle = GLASS;
     bctx.fillRect(0, 0, board.width, board.height);
-
     for (let y = 0; y < SIZE; y++) {
       for (let x = 0; x < SIZE; x++) {
-        const char = rows[y][x];
+        const char = w.rows[y][x];
         if (char === EMPTY) continue;
-        bctx.fillStyle = colorOf(char) ?? '#ff00ff';
+        bctx.fillStyle = colorOf(char, w) ?? '#ff00ff';
         bctx.fillRect(x * cell, y * cell, cell, cell);
       }
     }
-
-    // Quadrillage : fin partout, marque tous les 5 pour se reperer.
     bctx.lineWidth = 1;
     for (let i = 0; i <= SIZE; i++) {
       bctx.strokeStyle = i % 5 === 0 ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.09)';
@@ -768,68 +863,112 @@
     }
   }
 
-  // --- apercus ------------------------------------------------------------
-  function drawSpriteInto(ctx, zoom, ox = 0, oy = 0) {
-    for (let y = 0; y < SIZE; y++) {
-      for (let x = 0; x < SIZE; x++) {
+  /** Dessine n'importe quelle copie de travail ou pixel-map d'origine. */
+  function paint(ctx, source, zoom, ox = 0, oy = 0) {
+    const rows = source.rows;
+    const lookup = Array.isArray(source.palette)
+      ? (c) => source.palette.find((p) => p.char === c)?.color
+      : (c) => source.palette[c];
+    for (let y = 0; y < rows.length; y++) {
+      for (let x = 0; x < rows[y].length; x++) {
         const char = rows[y][x];
-        if (char === EMPTY) continue;
-        ctx.fillStyle = colorOf(char) ?? '#ff00ff';
-        ctx.fillRect(ox + x * zoom, oy + y * zoom, zoom, zoom);
-      }
-    }
-  }
-
-  function artInto(ctx, art, zoom, ox, oy) {
-    for (let y = 0; y < art.rows.length; y++) {
-      for (let x = 0; x < art.rows[y].length; x++) {
-        const char = art.rows[y][x];
         if (char === EMPTY || char === ' ') continue;
-        ctx.fillStyle = art.palette[char] ?? '#ff00ff';
+        ctx.fillStyle = lookup(char) ?? '#ff00ff';
         ctx.fillRect(ox + x * zoom, oy + y * zoom, zoom, zoom);
       }
     }
   }
 
   function paintPreviews() {
+    const w = work();
     for (const [id, zoom] of [['p1', 1], ['p2', 2], ['p4', 4]]) {
       const c = el(id);
       const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, c.width, c.height);
       ctx.fillStyle = GLASS;
       ctx.fillRect(0, 0, c.width, c.height);
-      drawSpriteInto(ctx, zoom);
+      paint(ctx, w, zoom);
     }
 
-    // La rangee : ta peluche au milieu de trois autres, taille reelle x2.
     const line = el('lineup');
     const ctx = line.getContext('2d');
-    ctx.clearRect(0, 0, line.width, line.height);
     ctx.fillStyle = FLOOR;
     ctx.fillRect(0, 0, line.width, line.height);
     ctx.fillStyle = 'rgba(255,255,255,0.14)';
     ctx.fillRect(0, line.height - 4, line.width, 1);
-
-    const slots = [SEED[0], SEED[3], null, SEED[5], SEED[7], SEED[2]];
     const zoom = 2;
-    const step = 40 + 10;
-    let x = 8;
-    for (const slot of slots) {
-      const oy = line.height - 4 - SIZE * zoom;
-      if (slot === null) drawSpriteInto(ctx, zoom, x, oy);
-      else artInto(ctx, slot.art, zoom, x, oy);
+    const gap = 6;
+    const step = SIZE * zoom + gap;
+    let x = Math.max(2, (line.width - (SEED.length * step - gap)) / 2);
+    for (const entry of SEED) {
+      const src = edits.get(entry.id) ?? entry.art;
+      paint(ctx, src, zoom, Math.round(x), line.height - 4 - SIZE * zoom);
       x += step;
     }
   }
 
-  // --- palette -------------------------------------------------------------
-  function nextChar() {
-    const used = new Set(palette.map((p) => p.char));
+  // --- casting ----------------------------------------------------------------
+  function paintRoster() {
+    const host = el('roster');
+    host.replaceChildren();
+    for (const entry of SEED) {
+      const w = edits.get(entry.id) ?? entry.art;
+      const name = edits.get(entry.id)?.name ?? entry.name;
+
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'roster-card';
+      card.setAttribute('aria-pressed', String(entry.id === currentId));
+
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.hidden = !isModified(entry.id);
+      dot.title = 'Modifié par rapport au dépôt';
+
+      const c = document.createElement('canvas');
+      c.width = c.height = 48;
+      paint(c.getContext('2d'), w, 2.4, 0, 0);
+
+      const label = document.createElement('b');
+      label.textContent = name;
+      const rarity = document.createElement('span');
+      rarity.className = 'rarity';
+      rarity.textContent = entry.rarityLabel;
+
+      card.append(dot, c, label, rarity);
+      card.addEventListener('click', () => selectPlush(entry.id));
+      host.appendChild(card);
+    }
+
+    const count = modifiedIds().length;
+    el('roster-note').textContent = count ? `${count} modifiée${count > 1 ? 's' : ''}` : 'Conforme au dépôt';
+  }
+
+  function selectPlush(id) {
+    if (id === currentId) return;
+    currentId = id;
+    undoStack.length = 0;
+    el('undo').disabled = true;
+    const w = work();
+    selected = w.palette[0]?.char ?? EMPTY;
+    syncAll();
+  }
+
+  // --- palette ------------------------------------------------------------------
+  function nextChar(w) {
+    const used = new Set(w.palette.map((p) => p.char));
     for (const c of CHAR_POOL) if (!used.has(c)) return c;
     return null;
   }
 
+  /** Encre lisible sur la pastille : sans ca la lettre disparait sur les clairs. */
+  function readableInk(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex)) return '#ffffff';
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? '#1b1330' : '#ffffff';
+  }
+
   function paintSwatches() {
+    const w = work();
     const host = el('swatches');
     host.replaceChildren();
 
@@ -847,7 +986,7 @@
     });
     host.appendChild(eraser);
 
-    for (const entry of palette) {
+    for (const entry of w.palette) {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'swatch';
@@ -856,7 +995,6 @@
       b.title = `${entry.char} — ${entry.color}`;
       b.setAttribute('aria-pressed', String(selected === entry.char));
       b.setAttribute('aria-label', `Couleur ${entry.char}, ${entry.color}`);
-      // Encre sombre sur une pastille claire, sinon la lettre disparait.
       const ink = readableInk(entry.color);
       b.style.color = ink;
       if (ink !== '#ffffff') b.style.textShadow = 'none';
@@ -875,20 +1013,20 @@
     add.title = 'Ajouter une couleur';
     add.setAttribute('aria-label', 'Ajouter une couleur');
     add.addEventListener('click', () => {
-      const char = nextChar();
+      const char = nextChar(w);
       if (!char) {
         setStatus('Palette pleine : 25 couleurs, c’est déjà beaucoup pour 20 × 20.', 'warn');
         return;
       }
       snapshot();
-      palette.push({ char, color: '#ffffff' });
+      w.palette.push({ char, color: '#ffffff' });
       selected = char;
       tool = 'pencil';
       syncAll();
     });
     host.appendChild(add);
 
-    const current = colorOf(selected);
+    const current = colorOf(selected, w);
     el('color-input').disabled = current === null;
     el('remove-color').disabled = current === null;
     if (current) {
@@ -900,30 +1038,31 @@
   }
 
   el('color-input').addEventListener('input', (ev) => {
-    const entry = palette.find((p) => p.char === selected);
+    const entry = work().palette.find((p) => p.char === selected);
     if (!entry) return;
     entry.color = ev.target.value;
     el('color-hex').textContent = entry.color;
     paintBoard();
     paintPreviews();
     paintSwatches();
+    paintRoster();
     writeExport();
-    saveDraft();
+    saveDrafts();
   });
 
   el('remove-color').addEventListener('click', () => {
-    const idx = palette.findIndex((p) => p.char === selected);
+    const w = work();
+    const idx = w.palette.findIndex((p) => p.char === selected);
     if (idx === -1) return;
     snapshot();
-    const char = palette[idx].char;
-    palette.splice(idx, 1);
-    // Les pixels orphelins redeviennent transparents.
-    rows = rows.map((row) => row.split('').map((c) => (c === char ? EMPTY : c)).join(''));
-    selected = palette[0]?.char ?? EMPTY;
+    const char = w.palette[idx].char;
+    w.palette.splice(idx, 1);
+    w.rows = w.rows.map((row) => row.split('').map((c) => (c === char ? EMPTY : c)).join(''));
+    selected = w.palette[0]?.char ?? EMPTY;
     syncAll();
   });
 
-  // --- outils ---------------------------------------------------------------
+  // --- outils ---------------------------------------------------------------------
   const TOOLS = [
     { id: 'pencil', label: 'Crayon' },
     { id: 'eraser', label: 'Gomme' },
@@ -940,7 +1079,7 @@
     b.textContent = t.label;
     b.addEventListener('click', () => {
       tool = t.id;
-      syncAll();
+      syncTools();
     });
     toolbar.appendChild(b);
   }
@@ -953,35 +1092,15 @@
   undoBtn.disabled = true;
   undoBtn.addEventListener('click', () => {
     const prev = undoStack.pop();
-    if (!prev) return;
-    rows = prev.rows;
-    palette = prev.palette;
-    if (!palette.some((p) => p.char === selected)) selected = palette[0]?.char ?? EMPTY;
+    if (!prev || prev.id !== currentId) return;
+    const w = work();
+    w.rows = prev.rows;
+    w.palette = prev.palette;
+    if (!w.palette.some((p) => p.char === selected)) selected = w.palette[0]?.char ?? EMPTY;
     undoBtn.disabled = undoStack.length === 0;
     syncAll();
   });
   toolbar.appendChild(undoBtn);
-
-  const clearBtn = document.createElement('button');
-  clearBtn.type = 'button';
-  clearBtn.className = 'ghost';
-  clearBtn.textContent = 'Vider';
-  clearBtn.addEventListener('click', () => {
-    snapshot();
-    rows = Array.from({ length: SIZE }, () => EMPTY.repeat(SIZE));
-    syncAll();
-  });
-  toolbar.appendChild(clearBtn);
-
-  const importLabel = document.createElement('label');
-  importLabel.className = 'ghost';
-  importLabel.textContent = 'Importer une image';
-  const importInput = document.createElement('input');
-  importInput.type = 'file';
-  importInput.accept = 'image/*';
-  importInput.hidden = true;
-  importLabel.appendChild(importInput);
-  toolbar.appendChild(importLabel);
 
   function syncTools() {
     for (const b of toolbar.querySelectorAll('.tool')) {
@@ -989,16 +1108,18 @@
     }
   }
 
-  // --- dessin ----------------------------------------------------------------
+  // --- interaction sur la grille ------------------------------------------------
   function cellAt(ev) {
     const rect = board.getBoundingClientRect();
-    const x = Math.floor(((ev.clientX - rect.left) / rect.width) * SIZE);
-    const y = Math.floor(((ev.clientY - rect.top) / rect.height) * SIZE);
-    return { x, y };
+    return {
+      x: Math.floor(((ev.clientX - rect.left) / rect.width) * SIZE),
+      y: Math.floor(((ev.clientY - rect.top) / rect.height) * SIZE),
+    };
   }
 
   function floodFill(sx, sy, target, replacement) {
     if (target === replacement) return;
+    const w = work();
     const queue = [[sx, sy]];
     const seen = new Set();
     while (queue.length) {
@@ -1007,7 +1128,7 @@
       const key = y * SIZE + x;
       if (seen.has(key)) continue;
       seen.add(key);
-      if (rows[y][x] !== target) continue;
+      if (w.rows[y][x] !== target) continue;
       setCell(x, y, replacement);
       queue.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
     }
@@ -1018,10 +1139,10 @@
   function applyAt(ev, isStart) {
     const { x, y } = cellAt(ev);
     if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
+    const w = work();
 
     if (tool === 'pick') {
-      const char = rows[y][x];
-      selected = char;
+      selected = w.rows[y][x];
       tool = 'pencil';
       syncAll();
       return;
@@ -1029,8 +1150,7 @@
     if (tool === 'fill') {
       if (!isStart) return;
       snapshot();
-      // Pour remplir en transparent, on choisit la pastille « . ».
-      floodFill(x, y, rows[y][x], selected);
+      floodFill(x, y, w.rows[y][x], selected);
       syncAll();
       return;
     }
@@ -1059,9 +1179,9 @@
   const stopPainting = () => {
     if (!painting) return;
     painting = false;
+    paintRoster();
     writeExport();
-    updateUsed();
-    saveDraft();
+    saveDrafts();
   };
   board.addEventListener('pointerup', stopPainting);
   board.addEventListener('pointercancel', stopPainting);
@@ -1070,72 +1190,40 @@
     stopPainting();
   });
 
-  // --- import d'image ----------------------------------------------------------
-  importInput.addEventListener('change', async () => {
-    const file = importInput.files?.[0];
-    if (!file) return;
-    importInput.value = '';
-    try {
-      const bitmap = await createImageBitmap(file);
-      const c = document.createElement('canvas');
-      c.width = SIZE;
-      c.height = SIZE;
-      const ctx = c.getContext('2d', { willReadFrequently: true });
-      ctx.imageSmoothingEnabled = false;
-      // Recadrage carre au centre, puis reduction au plus proche voisin.
-      const side = Math.min(bitmap.width, bitmap.height);
-      const sx = (bitmap.width - side) / 2;
-      const sy = (bitmap.height - side) / 2;
-      ctx.drawImage(bitmap, sx, sy, side, side, 0, 0, SIZE, SIZE);
-      const data = ctx.getImageData(0, 0, SIZE, SIZE).data;
-
-      snapshot();
-      const built = [];
-      const nextRows = [];
-      for (let y = 0; y < SIZE; y++) {
-        let line = '';
-        for (let x = 0; x < SIZE; x++) {
-          const i = (y * SIZE + x) * 4;
-          if (data[i + 3] < 128) {
-            line += EMPTY;
-            continue;
-          }
-          const hex = rgbToHex(data[i], data[i + 1], data[i + 2]);
-          line += charFor(hex, built);
-        }
-        nextRows.push(line);
-      }
-      rows = nextRows;
-      palette = built;
-      selected = palette[0]?.char ?? EMPTY;
-      syncAll();
-      setStatus(
-        `Image importée et réduite à 20 × 20 en ${palette.length} couleurs. ` +
-          `Retouche-la à la main : une réduction automatique ne fait jamais du bon pixel art.`,
-        'good',
-      );
-    } catch {
-      setStatus('Cette image n’a pas pu être lue.', 'warn');
-    }
-  });
-
-  /** Noir ou blanc, selon la luminance percue de la pastille. */
-  function readableInk(hex) {
-    if (!/^#[0-9a-f]{6}$/i.test(hex)) return '#ffffff';
-    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? '#1b1330' : '#ffffff';
+  // --- identite --------------------------------------------------------------------
+  for (const [id, prop] of [['name', 'name'], ['key', 'key'], ['blurb', 'blurb']]) {
+    el(id).addEventListener('input', () => {
+      work()[prop] = el(id).value;
+      paintRoster();
+      writeExport();
+      saveDrafts();
+    });
   }
 
+  el('reset-one').addEventListener('click', () => {
+    const entry = ORIGINALS.get(currentId);
+    edits.set(currentId, cloneOriginal(entry));
+    undoStack.length = 0;
+    el('undo').disabled = true;
+    selected = work().palette[0]?.char ?? EMPTY;
+    syncAll();
+    setStatus(`« ${entry.name} » est revenue à l’état du dépôt.`, 'good');
+  });
+
+  // --- import d'image ----------------------------------------------------------------
   const rgbToHex = (r, g, b) =>
     '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
 
-  const MAX_COLORS = 16;
+  const colorDistance = (a, b) => {
+    const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+    const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+    return (pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2 + (pa[2] - pb[2]) ** 2;
+  };
 
-  /** Rend la lettre de `hex`, en creant l'entree ou en prenant la plus proche. */
   function charFor(hex, built) {
     const found = built.find((p) => p.color === hex);
     if (found) return found.char;
-    if (built.length < MAX_COLORS) {
+    if (built.length < MAX_IMPORT_COLORS) {
       const used = new Set(built.map((p) => p.char));
       const char = [...CHAR_POOL].find((c) => !used.has(c));
       if (char) {
@@ -1143,7 +1231,6 @@
         return char;
       }
     }
-    // Palette pleine : on rabat sur la couleur la plus proche.
     let best = built[0];
     let bestD = Infinity;
     for (const p of built) {
@@ -1156,49 +1243,113 @@
     return best ? best.char : EMPTY;
   }
 
-  function colorDistance(a, b) {
-    const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
-    const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
-    return (pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2 + (pa[2] - pb[2]) ** 2;
-  }
+  el('import').addEventListener('change', async (ev) => {
+    const file = ev.target.files?.[0];
+    if (!file) return;
+    ev.target.value = '';
+    try {
+      const bitmap = await createImageBitmap(file);
+      const c = document.createElement('canvas');
+      c.width = c.height = SIZE;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.imageSmoothingEnabled = false;
+      const side = Math.min(bitmap.width, bitmap.height);
+      ctx.drawImage(
+        bitmap,
+        (bitmap.width - side) / 2,
+        (bitmap.height - side) / 2,
+        side,
+        side,
+        0,
+        0,
+        SIZE,
+        SIZE,
+      );
+      const data = ctx.getImageData(0, 0, SIZE, SIZE).data;
 
-  // --- sortie -------------------------------------------------------------------
-  const sanitizeKey = (raw) => (raw.replace(/[^A-Za-z0-9]/g, '') || 'peluche');
+      snapshot();
+      const built = [];
+      const rows = [];
+      for (let y = 0; y < SIZE; y++) {
+        let line = '';
+        for (let x = 0; x < SIZE; x++) {
+          const i = (y * SIZE + x) * 4;
+          line += data[i + 3] < 128 ? EMPTY : charFor(rgbToHex(data[i], data[i + 1], data[i + 2]), built);
+        }
+        rows.push(line);
+      }
+      const w = work();
+      w.rows = rows;
+      w.palette = built;
+      selected = built[0]?.char ?? EMPTY;
+      syncAll();
+      setStatus(
+        `Image réduite à 20 × 20 en ${built.length} couleurs. Retouche-la à la main : ` +
+          `une réduction automatique ne fait jamais du bon pixel art.`,
+        'good',
+      );
+    } catch {
+      setStatus('Cette image n’a pas pu être lue.', 'warn');
+    }
+  });
 
-  function usedChars() {
+  // --- patch ---------------------------------------------------------------------------
+  const sanitizeKey = (raw) => raw.replace(/[^A-Za-z0-9]/g, '') || 'peluche';
+
+  function usedChars(w) {
     const used = new Set();
-    for (const row of rows) for (const c of row) if (c !== EMPTY) used.add(c);
+    for (const row of w.rows) for (const c of row) if (c !== EMPTY) used.add(c);
     return used;
   }
 
-  function updateUsed() {
-    const used = usedChars();
-    const unused = palette.filter((p) => !used.has(p.char));
-    el('used-note').textContent =
-      `${used.size} couleur${used.size > 1 ? 's' : ''} utilisée${used.size > 1 ? 's' : ''}` +
-      (unused.length ? ` · ${unused.length} inutilisée${unused.length > 1 ? 's' : ''}` : '');
-  }
+  function patchFor(id) {
+    const w = edits.get(id) ?? cloneOriginal(ORIGINALS.get(id));
+    const o = ORIGINALS.get(id);
+    const key = sanitizeKey(w.key);
+    const used = usedChars(w);
+    const paletteLines = w.palette
+      .filter((p) => used.has(p.char))
+      .map((p) => `    ${p.char}: '${p.color}',`)
+      .join('\n');
+    const rowLines = w.rows.map((r) => `    '${r}',`).join('\n');
 
-  function exportTs() {
-    const key = sanitizeKey(el('key').value);
-    const name = el('name').value.trim() || key;
-    const used = usedChars();
-    const entries = palette.filter((p) => used.has(p.char));
-    const paletteLines = entries.map((p) => `    ${p.char}: '${p.color}',`).join('\n');
-    const rowLines = rows.map((r) => `    '${r}',`).join('\n');
-    return (
-      `/** ${name} */\n` +
+    let out =
+      `// --- ${w.name} ---\n` +
+      `// src/render/art/plushies.ts\n` +
+      `/** ${w.name} */\n` +
       `export const ${key}: PixelArt = {\n` +
       `  palette: {\n${paletteLines}\n  },\n` +
-      `  rows: [\n${rowLines}\n  ],\n};\n`
-    );
+      `  rows: [\n${rowLines}\n  ],\n};\n`;
+
+    const identityChanged = w.name !== o.name || w.blurb !== o.blurb || key !== o.key;
+    if (identityChanged) {
+      out +=
+        `\n// src/game/prizes.ts — entrée id: '${id}'\n` +
+        `    name: '${w.name.replace(/'/g, "\\'")}',\n` +
+        `    blurb: '${w.blurb.replace(/'/g, "\\'")}',\n` +
+        `    sprite: '${key}',\n`;
+    }
+    return out;
   }
 
   function writeExport() {
-    el('export').textContent = exportTs();
-    const used = usedChars();
-    el('out-note').textContent = `${used.size} couleurs · ${SIZE} × ${SIZE}`;
-    updateUsed();
+    const w = work();
+    el('export').textContent = patchFor(currentId);
+    el('out-note').textContent = `${usedChars(w).size} couleurs · ${SIZE} × ${SIZE}`;
+    el('grid-title').textContent = w.name || 'Grille';
+    el('identity-note').textContent = isModified(currentId) ? 'Modifiée' : 'Conforme au dépôt';
+
+    const used = usedChars(w);
+    const unused = w.palette.filter((p) => !used.has(p.char));
+    el('used-note').textContent =
+      `${used.size} couleur${used.size > 1 ? 's' : ''} utilisée${used.size > 1 ? 's' : ''}` +
+      (unused.length ? ` · ${unused.length} inutilisée${unused.length > 1 ? 's' : ''}` : '');
+
+    const count = modifiedIds().length;
+    el('copy-all').disabled = count === 0;
+    el('copy-all').textContent = count
+      ? `Copier tout le casting (${count})`
+      : 'Copier tout le casting';
   }
 
   function setStatus(text, kind = '') {
@@ -1207,45 +1358,40 @@
     s.className = `status${kind ? ` is-${kind}` : ''}`;
   }
 
-  el('copy-ts').addEventListener('click', async () => {
+  async function copy(text, ok) {
     try {
-      await navigator.clipboard.writeText(exportTs());
-      setStatus('Bloc copié. Colle-le dans src/render/art/plushies.ts.', 'good');
+      await navigator.clipboard.writeText(text);
+      setStatus(ok, 'good');
     } catch {
       setStatus('Copie refusée par le navigateur — sélectionne le bloc ci-dessous.', 'warn');
     }
+  }
+
+  el('copy-one').addEventListener('click', () =>
+    copy(patchFor(currentId), 'Patch copié. Colle-le dans plushies.ts (et prizes.ts si l’identité a changé).'),
+  );
+
+  el('copy-all').addEventListener('click', () => {
+    const ids = modifiedIds();
+    if (!ids.length) return;
+    copy(ids.map(patchFor).join('\n'), `${ids.length} patch(s) copiés.`);
   });
 
-  for (const id of ['name', 'key']) {
-    el(id).addEventListener('input', () => {
-      writeExport();
-      saveDraft();
-    });
-  }
-
-  // --- PNG ------------------------------------------------------------------------
-  function toPngBlob() {
-    const c = document.createElement('canvas');
-    c.width = SIZE;
-    c.height = SIZE;
-    const ctx = c.getContext('2d');
-    drawSpriteInto(ctx, 1);
-    return new Promise((resolve) => c.toBlob(resolve, 'image/png'));
-  }
-
+  // --- PNG ---------------------------------------------------------------------------------
   let downloads = null;
   const saveBtn = el('save-png');
   saveBtn.disabled = true;
 
   saveBtn.addEventListener('click', async () => {
     if (!downloads) return;
-    const blob = await toPngBlob();
+    const w = work();
+    const c = document.createElement('canvas');
+    c.width = c.height = SIZE;
+    paint(c.getContext('2d'), w, 1);
+    const blob = await new Promise((resolve) => c.toBlob(resolve, 'image/png'));
     if (!blob) return;
     try {
-      const res = await downloads.save({
-        filename: `${sanitizeKey(el('key').value)}.png`,
-        data: blob,
-      });
+      const res = await downloads.save({ filename: `${sanitizeKey(w.key)}.png`, data: blob });
       if (res.status === 'saved') {
         setStatus('PNG enregistré. Dépose-le dans src/render/art/custom/.', 'good');
       }
@@ -1255,166 +1401,124 @@
     }
   });
 
-  // --- etagere partagee --------------------------------------------------------------
+  // --- version de l'equipe -------------------------------------------------------------------
   let db = null;
-  const shelveBtn = el('shelve');
-  shelveBtn.disabled = true;
+  const saveTeamBtn = el('save-team');
+  saveTeamBtn.disabled = true;
 
-  shelveBtn.addEventListener('click', async () => {
+  saveTeamBtn.addEventListener('click', async () => {
     if (!db) return;
-    const used = usedChars();
-    if (used.size === 0) {
-      setStatus('La grille est vide.', 'warn');
-      return;
-    }
-    shelveBtn.disabled = true;
+    const w = work();
+    const used = usedChars(w);
+    saveTeamBtn.disabled = true;
     try {
-      await db.collection('shelf').add({
-        name: el('name').value.trim() || sanitizeKey(el('key').value),
-        key: sanitizeKey(el('key').value),
-        rows: rows.slice(),
+      await db.doc(`roster/${currentId}`).set({
+        name: w.name,
+        key: sanitizeKey(w.key),
+        blurb: w.blurb,
+        rows: w.rows.slice(),
         palette: Object.fromEntries(
-          palette.filter((p) => used.has(p.char)).map((p) => [p.char, p.color]),
+          w.palette.filter((p) => used.has(p.char)).map((p) => [p.char, p.color]),
         ),
-        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
-      setStatus('Posée sur l’étagère.', 'good');
+      setStatus(`« ${w.name} » enregistrée pour l’équipe.`, 'good');
     } catch (e) {
       setStatus(
-        e?.code === 'quota_exceeded'
-          ? 'L’étagère est pleine.'
-          : 'La peluche n’est pas partie. Réessaie.',
+        e?.code === 'quota_exceeded' ? 'La base est pleine.' : 'L’enregistrement n’est pas parti.',
         'warn',
       );
     } finally {
-      shelveBtn.disabled = false;
+      saveTeamBtn.disabled = false;
     }
   });
 
-  function renderShelf(items) {
-    const host = el('shelf');
-    const empty = el('shelf-empty');
-    el('shelf-note').textContent = items.length
-      ? `${items.length} peluche${items.length > 1 ? 's' : ''}`
-      : 'Vide';
-    if (!items.length) {
-      empty.hidden = false;
-      host.hidden = true;
+  el('load-team').addEventListener('click', () => {
+    const doc = team.get(currentId);
+    if (!doc) return;
+    snapshot();
+    const w = work();
+    w.name = String(doc.name ?? w.name);
+    w.key = String(doc.key ?? w.key);
+    w.blurb = String(doc.blurb ?? w.blurb);
+    w.rows = doc.rows.slice();
+    w.palette = Object.entries(doc.palette ?? {}).map(([char, color]) => ({ char, color }));
+    selected = w.palette[0]?.char ?? EMPTY;
+    syncAll();
+    setStatus('Version de l’équipe chargée dans la grille.', 'good');
+  });
+
+  function paintTeamLine() {
+    const doc = team.get(currentId);
+    const text = el('team-text');
+    const btn = el('load-team');
+    if (!doc) {
+      text.textContent = 'Version de l’équipe : aucune';
+      btn.hidden = true;
       return;
     }
-    empty.hidden = true;
-    host.hidden = false;
-    host.replaceChildren();
-
-    for (const item of items) {
-      if (!Array.isArray(item.rows) || item.rows.length !== SIZE) continue;
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'shelf-item';
-
-      const c = document.createElement('canvas');
-      c.width = c.height = 60;
-      artInto(c.getContext('2d'), { rows: item.rows, palette: item.palette ?? {} }, 3, 0, 0);
-      const label = document.createElement('b');
-      label.textContent = String(item.name ?? '—').slice(0, 24);
-      const key = document.createElement('span');
-      key.textContent = String(item.key ?? '').slice(0, 24);
-      card.append(c, label, key);
-
-      card.addEventListener('click', () => {
-        snapshot();
-        rows = item.rows.slice();
-        palette = Object.entries(item.palette ?? {}).map(([char, color]) => ({ char, color }));
-        selected = palette[0]?.char ?? EMPTY;
-        el('name').value = String(item.name ?? '');
-        el('key').value = String(item.key ?? '');
-        syncAll();
-        setStatus(`« ${item.name} » reprise dans la grille.`, 'good');
-      });
-
-      host.appendChild(card);
-    }
+    const when = new Date(String(doc.updatedAt));
+    const stamp = Number.isNaN(when.getTime())
+      ? ''
+      : ` · ${when.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+    text.textContent = `Version de l’équipe : « ${doc.name ?? '—'} »${stamp}`;
+    btn.hidden = false;
   }
 
-  // --- points de depart -------------------------------------------------------------
-  const starterHost = el('starters');
-  for (const entry of SEED) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'starter';
-    const c = document.createElement('canvas');
-    c.width = c.height = 32;
-    artInto(c.getContext('2d'), entry.art, 1.6, 0, 0);
-    const label = document.createElement('span');
-    label.textContent = entry.name;
-    b.append(c, label);
-    b.addEventListener('click', () => {
-      snapshot();
-      rows = entry.art.rows.slice();
-      palette = Object.entries(entry.art.palette).map(([char, color]) => ({ char, color }));
-      selected = palette[0]?.char ?? EMPTY;
-      el('name').value = entry.name;
-      el('key').value = entry.key;
-      syncAll();
-      setStatus(`« ${entry.name} » chargée. Elle est à toi.`, 'good');
-    });
-    starterHost.appendChild(b);
-  }
-
-  // --- brouillon local ------------------------------------------------------------
-  const DRAFT_KEY = 'claw-atelier:draft';
-
-  function saveDraft() {
+  // --- brouillons locaux ----------------------------------------------------------------------
+  function saveDrafts() {
     try {
-      localStorage.setItem(
-        DRAFT_KEY,
-        JSON.stringify({
-          rows,
-          palette,
-          name: el('name').value,
-          key: el('key').value,
-        }),
-      );
+      const payload = {};
+      for (const id of modifiedIds()) payload[id] = edits.get(id);
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
     } catch {
       /* stockage bloque : on continue sans brouillon */
     }
   }
 
-  function loadDraft() {
+  function loadDrafts() {
     try {
       const raw = localStorage.getItem(DRAFT_KEY);
-      if (!raw) return false;
-      const draft = JSON.parse(raw);
-      if (!Array.isArray(draft.rows) || draft.rows.length !== SIZE) return false;
-      if (draft.rows.some((r) => typeof r !== 'string' || r.length !== SIZE)) return false;
-      rows = draft.rows;
-      palette = Array.isArray(draft.palette) ? draft.palette : [];
-      selected = palette[0]?.char ?? EMPTY;
-      if (draft.name) el('name').value = draft.name;
-      if (draft.key) el('key').value = draft.key;
-      return true;
+      if (!raw) return;
+      const payload = JSON.parse(raw);
+      for (const [id, draft] of Object.entries(payload)) {
+        if (!ORIGINALS.has(id)) continue;
+        if (!Array.isArray(draft?.rows) || draft.rows.length !== SIZE) continue;
+        if (draft.rows.some((r) => typeof r !== 'string' || r.length !== SIZE)) continue;
+        edits.set(id, {
+          name: String(draft.name ?? ORIGINALS.get(id).name),
+          key: String(draft.key ?? ORIGINALS.get(id).key),
+          blurb: String(draft.blurb ?? ORIGINALS.get(id).blurb),
+          rows: draft.rows,
+          palette: Array.isArray(draft.palette) ? draft.palette : [],
+        });
+      }
     } catch {
-      return false;
+      /* brouillon illisible : on repart du depot */
     }
   }
 
-  // --- boucle de synchro -------------------------------------------------------------
+  // --- synchro ----------------------------------------------------------------------------------
   function syncAll() {
+    const w = work();
+    el('name').value = w.name;
+    el('key').value = w.key;
+    el('blurb').value = w.blurb;
     paintBoard();
     paintPreviews();
     paintSwatches();
+    paintRoster();
+    paintTeamLine();
     syncTools();
     writeExport();
-    saveDraft();
+    saveDrafts();
   }
 
-  el('name').value = START.name;
-  el('key').value = START.key;
-  loadDraft();
+  loadDrafts();
+  selected = work().palette[0]?.char ?? EMPTY;
   syncAll();
   setStatus('');
 
-  // Les capacites arrivent apres le premier tour de script : la page marche sans.
   if (window.claude?.use) {
     window.claude.use('downloads').then((cap) => {
       downloads = cap;
@@ -1422,26 +1526,20 @@
     });
 
     window.claude.use('db').then((store) => {
-      if (!store) {
-        renderShelf([]);
-        el('shelf-note').textContent = 'Indisponible ici';
-        return;
-      }
+      if (!store) return;
       db = store;
-      shelveBtn.disabled = false;
-      store
-        .collection('shelf')
-        .orderBy('createdAt', 'desc')
-        .limit(60)
-        .onSnapshot(
-          (snap) => renderShelf(snap.docs.map((d) => d.data() ?? {})),
-          () => {
-            el('shelf-note').textContent = 'Rafraîchissement interrompu';
-          },
-        );
+      saveTeamBtn.disabled = false;
+      store.collection('roster').onSnapshot(
+        (snap) => {
+          team.clear();
+          for (const doc of snap.docs) {
+            const data = doc.data();
+            if (Array.isArray(data?.rows) && data.rows.length === SIZE) team.set(doc.id, data);
+          }
+          paintTeamLine();
+        },
+        () => setStatus('Les versions de l’équipe ne se rafraîchissent plus.', 'warn'),
+      );
     });
-  } else {
-    renderShelf([]);
-    el('shelf-note').textContent = 'Indisponible ici';
   }
 </script>

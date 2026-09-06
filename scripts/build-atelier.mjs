@@ -1,5 +1,5 @@
 /**
- * Assemble l'atelier de sprites : les pixel-maps du jeu sont injectees en JSON
+ * Assemble l'atelier du casting : les pixel-maps du jeu sont injectees en JSON
  * dans artifact/atelier.html, pour que l'atelier parte toujours de l'art reel
  * du depot et pas d'une copie qui derive.
  *
@@ -25,8 +25,11 @@ const prizes = await loadModule('src/game/prizes.ts');
 const seed = prizes.PRIZES.map((p) => ({
   id: p.id,
   name: p.name,
+  blurb: p.blurb,
   key: p.sprite,
   rarity: p.rarity,
+  rarityLabel: prizes.RARITY_LABEL[p.rarity],
+  value: p.value,
   art: art.PLUSH_ART[p.sprite],
 }));
 for (const entry of seed) {

@@ -17,3 +17,6 @@ dist-artifact/
 src/render/art/custom/*
 !src/render/art/custom/.gitkeep
 !src/render/art/custom/README.md
+
+# Captures de test qui atterrissent a la racine si SHOT_DIR n est pas defini.
+/*.png

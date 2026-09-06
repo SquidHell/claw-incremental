@@ -40,6 +40,20 @@ interface PointerOwner {
 
 export type VirtualPoint = { x: number; y: number };
 
+/**
+ * Le joueur est-il en train d'ecrire ? Le miroir clavier appelle
+ * `preventDefault()` sur Espace et les fleches ; sans ce garde-fou, le jeu
+ * volerait ces touches a n'importe quel champ de saisie de la page hote —
+ * ce qui casse net un formulaire a cote du canvas (page de playtest, page de
+ * documentation, iframe embarquee).
+ */
+export function isTextEntry(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  const tag = target.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+}
+
 export class Input {
   readonly buttons = new Map<string, ButtonState>();
   private readonly specs = new Map<string, ButtonSpec>();
@@ -73,7 +87,7 @@ export class Input {
     add('contextmenu', (ev) => ev.preventDefault());
 
     const onKeyDown = (ev: KeyboardEvent) => {
-      if (ev.repeat) return;
+      if (ev.repeat || isTextEntry(ev.target)) return;
       const id = this.buttonForKey(ev.code);
       if (!id) return;
       ev.preventDefault();
@@ -82,6 +96,7 @@ export class Input {
       this.setDown(id, true);
     };
     const onKeyUp = (ev: KeyboardEvent) => {
+      if (isTextEntry(ev.target)) return;
       const id = this.buttonForKey(ev.code);
       if (!id) return;
       this.keyDown.delete(ev.code);

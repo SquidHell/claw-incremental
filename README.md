@@ -25,6 +25,7 @@ npm run dev        # http://localhost:5173
 | `npm run check:art`  | valide les grilles de pixel art et les palettes   |
 | `npm run test`       | test de fumee Playwright sur Chromium mobile      |
 | `npm run check`      | les trois ci-dessus                               |
+| `npm run build:playtest` | assemble la page de playtest (voir plus bas)  |
 
 ## Jouer
 
@@ -68,6 +69,21 @@ Autres details qui comptent :
 - `touch-action: none` + `overscroll-behavior: none` : ni scroll, ni
   pull-to-refresh, ni zoom double-tap pendant la partie.
 
+## Page de playtest
+
+`npm run build:playtest` compile le jeu avec `VITE_PLAYTEST=1` (ce qui expose
+`window.__claw`, la poignee de telemetrie) puis injecte le bundle dans
+`artifact/template.html`, qui devient `dist-artifact/playtest.html` : une page
+autonome ou le jeu tourne pour de vrai, avec une fiche de releve a cote.
+
+Le template est la source versionnee ; le fichier assemble ne l'est pas. La page
+joint automatiquement les compteurs de la session (parties, gains, pieces,
+collection, graine) au releve, pour qu'un bug rapporte soit rejouable a
+l'identique.
+
+La commande utilise la syntaxe POSIX pour la variable d'environnement ; sous
+Windows, lancer les deux etapes separement.
+
 ## Les peluches
 
 Huit mascottes : Pim, Zeb, Blip, Gloop, Elira, Sir Cube, Draka et Aurex.
@@ -77,6 +93,11 @@ Huit mascottes : Pim, Zeb, Blip, Gloop, Elira, Sir Cube, Draka et Aurex.
 chevalier, le blob, le dragonnet, la relique doree) sans reproduire aucun
 personnage sous licence : pas de logo, pas de marque, pas de combinaison
 forme/couleur distinctive d'une oeuvre existante, et des noms inventes.
+
+Le parti pris graphique est la **gueule** plutot que la ressemblance : yeux
+desassortis, pupilles qui partent chacune de leur cote, dents du bonheur,
+langues qui pendent. En 20x20 une peluche doit se lire et faire rire, pas etre
+jolie.
 
 Pour mettre ton propre art : remplace la pixel-map dans
 `src/render/art/plushies.ts`, ou passe par `loadSheet()` de

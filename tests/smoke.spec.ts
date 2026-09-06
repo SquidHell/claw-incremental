@@ -148,6 +148,37 @@ test('DESCENDRE est ignore tant que le cycle n est pas fini', async ({ page }) =
   expect(plays).toBe(1);
 });
 
+test('le jeu ne vole pas les touches d un champ de saisie', async ({ page }) => {
+  // Le miroir clavier appelle preventDefault() sur Espace et les fleches. Sans
+  // garde-fou il casserait n'importe quel formulaire sur la meme page — c'est
+  // exactement ce que fait la page de playtest, qui embarque le jeu a cote
+  // d'un champ de texte.
+  const before = await page.evaluate(() => window.__claw.machine.clawX);
+
+  await page.evaluate(() => {
+    const input = document.createElement('input');
+    input.id = 'probe';
+    document.body.appendChild(input);
+    input.focus();
+  });
+
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.type('abc');
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(500);
+
+  const after = await page.evaluate(() => ({
+    clawX: window.__claw.machine.clawX,
+    phase: window.__claw.machine.phase,
+    typed: (document.getElementById('probe') as HTMLInputElement).value,
+  }));
+
+  expect(after.clawX).toBeCloseTo(before, 3);
+  expect(after.phase).toBe('ready');
+  // Espace doit atteindre le champ, pas la pince.
+  expect(after.typed).toBe('abc ');
+});
+
 test('une peluche finit par tomber dans le bac et declenche la carte de gain', async ({
   page,
 }) => {

@@ -3,7 +3,7 @@
  * puis lance la boucle a pas fixe.
  */
 import { Screen, VIRTUAL_H, VIRTUAL_W } from './render/canvas.ts';
-import { Input } from './core/input.ts';
+import { Input, isTextEntry } from './core/input.ts';
 import { startLoop } from './core/loop.ts';
 import { on } from './core/events.ts';
 import { haptic, setHapticsEnabled } from './core/haptics.ts';
@@ -121,6 +121,7 @@ on('coins:changed', ({ delta }) => {
 // --- entrees additionnelles ---------------------------------------------
 
 window.addEventListener('keydown', (ev) => {
+  if (isTextEntry(ev.target)) return;
   if (ev.code === 'F3' || ev.code === 'Backquote') {
     debug = !debug;
     ev.preventDefault();
@@ -252,8 +253,9 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', () => saveState(state));
 
-// Poignee de debug utilisee par le test de fumee Playwright.
-if (import.meta.env.DEV) {
+// Poignee de debug : utilisee par le test de fumee Playwright, et par la page
+// de playtest pour joindre les compteurs de la partie au formulaire de retour.
+if (import.meta.env.DEV || import.meta.env.VITE_PLAYTEST) {
   (window as unknown as Record<string, unknown>).__claw = {
     machine,
     state,

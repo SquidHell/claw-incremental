@@ -1,0 +1,1147 @@
+<title>Banc d'essai CLAW-O-RAMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen&display=swap"
+/>
+
+<style>
+  /* Le squelette d'artefact ne pose pas box-sizing : sans cette regle, un
+     champ en width:100% deborde de sa fiche a cause de son padding. */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :root {
+    /* Neutres teintes violet, pris sur la vitre de la borne — jamais du gris pur. */
+    --ground: #f4f1fa;
+    --panel: #ffffff;
+    --panel-2: #ebe6f4;
+    --ink: #1b1330;
+    --ink-2: #574a75;
+    --ink-3: #8579a6;
+    --line: #ded6ee;
+    --line-strong: #c6bade;
+
+    /* Couleurs de la borne elle-meme. */
+    --accent: #b32453;
+    --accent-soft: #fbe7ee;
+    --gold: #a8730a;
+    --gold-bg: #fcf1d6;
+    --teal: #10736d;
+    --teal-bg: #dcf3f1;
+    --warn: #a2560c;
+
+    --shadow: 0 1px 2px rgba(27, 19, 48, 0.06), 0 8px 24px -12px rgba(27, 19, 48, 0.18);
+    --radius: 10px;
+
+    --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --font-pixel: 'Silkscreen', 'Courier New', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --ground: #0f0a1b;
+      --panel: #181026;
+      --panel-2: #211634;
+      --ink: #f3effb;
+      --ink-2: #b6a8d2;
+      --ink-3: #8878a8;
+      --line: #2b2040;
+      --line-strong: #3d2f58;
+
+      --accent: #ec5a89;
+      --accent-soft: #33101f;
+      --gold: #ffd94a;
+      --gold-bg: #2f2408;
+      --teal: #45ded0;
+      --teal-bg: #0c2d2b;
+      --warn: #f0a44a;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --ground: #0f0a1b;
+    --panel: #181026;
+    --panel-2: #211634;
+    --ink: #f3effb;
+    --ink-2: #b6a8d2;
+    --ink-3: #8878a8;
+    --line: #2b2040;
+    --line-strong: #3d2f58;
+
+    --accent: #ec5a89;
+    --accent-soft: #33101f;
+    --gold: #ffd94a;
+    --gold-bg: #2f2408;
+    --teal: #45ded0;
+    --teal-bg: #0c2d2b;
+    --warn: #f0a44a;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .wrap {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  /* --- en-tete ------------------------------------------------------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 26px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    max-width: 62ch;
+    color: var(--ink-2);
+  }
+
+  .lede strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* --- grille principale --------------------------------------------- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+    gap: 30px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+    }
+  }
+
+  /* --- baie de la borne ---------------------------------------------- */
+
+  .bay {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .bay {
+      position: static;
+      /* Pleine largeur en mobile : la borne gagne les quelques pixels qui lui
+         manquaient pour tenir un facteur d'echelle entier de 2. */
+      margin-inline: -20px;
+    }
+  }
+
+  .marquee {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 4px;
+  }
+
+  @media (max-width: 900px) {
+    .marquee {
+      padding-inline: 20px;
+    }
+  }
+
+  .marquee-name {
+    font-family: var(--font-pixel);
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  .marquee-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+
+  .bay-fit {
+    display: flex;
+    justify-content: center;
+    /* Hauteur reservee, mise a jour en JS selon le facteur d'ajustement. */
+    height: 640px;
+  }
+
+  .stage {
+    width: 360px;
+    height: 640px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: #0b0713;
+    border-radius: 12px;
+    overflow: hidden;
+    transform-origin: top center;
+    box-shadow: var(--shadow);
+    touch-action: none;
+  }
+
+  @media (max-width: 900px) {
+    .stage {
+      border-radius: 0;
+    }
+  }
+
+  #screen {
+    display: block;
+    image-rendering: pixelated;
+    touch-action: none;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 0 4px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 900px) {
+    .legend {
+      padding-inline: 20px;
+    }
+  }
+
+  .legend b {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  /* --- fiche de releve ------------------------------------------------ */
+
+  .log {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  .sheet {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+  }
+
+  .sheet-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .sheet-head .eyebrow {
+    font-size: 10px;
+  }
+
+  .sheet-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* --- compteurs de la partie en cours -------------------------------- */
+
+  .meters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .meter {
+    background: var(--panel);
+    padding: 11px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meter dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .meter dd {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 21px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .meter.is-gold dd {
+    color: var(--gold);
+  }
+
+  /* --- formulaire ------------------------------------------------------ */
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .field > label,
+  .field > .field-label {
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+
+  .field .hint {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.45;
+  }
+
+  input[type='text'],
+  textarea {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 9px 11px;
+    width: 100%;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 84px;
+    line-height: 1.5;
+  }
+
+  input[type='text']::placeholder,
+  textarea::placeholder {
+    color: var(--ink-3);
+  }
+
+  .scale {
+    display: flex;
+    gap: 6px;
+  }
+
+  .scale button,
+  .chips button {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 8px 0;
+    flex: 1;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+  }
+
+  .chips {
+    display: flex;
+    gap: 6px;
+  }
+
+  .chips button {
+    font-family: var(--font-body);
+    padding: 8px 10px;
+  }
+
+  .scale button:hover,
+  .chips button:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .scale button[aria-pressed='true'],
+  .chips button[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  :root[data-theme='dark'] .scale button[aria-pressed='true'],
+  :root[data-theme='dark'] .chips button[aria-pressed='true'] {
+    color: #200613;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .scale button[aria-pressed='true'],
+    :root:not([data-theme='light']) .chips button[aria-pressed='true'] {
+      color: #200613;
+    }
+  }
+
+  .scale-ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+
+  .submit-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: 0.01em;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 7px;
+    padding: 11px 20px;
+    cursor: pointer;
+  }
+
+  :root[data-theme='dark'] .btn {
+    color: #200613;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .btn {
+      color: #200613;
+    }
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .status {
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .status.is-good {
+    color: var(--teal);
+  }
+
+  .status.is-warn {
+    color: var(--warn);
+  }
+
+  /* --- resultats ------------------------------------------------------- */
+
+  .bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42px;
+    gap: 10px 12px;
+    align-items: center;
+  }
+
+  .bar-label {
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .bar-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .bar-track {
+    grid-column: 1 / -1;
+    position: relative;
+    height: 8px;
+    background: var(--panel-2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill {
+      transition: none;
+    }
+  }
+
+  .split {
+    display: flex;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  .split div {
+    flex: 1;
+    background: var(--panel);
+    padding: 9px 10px;
+    text-align: center;
+  }
+
+  .split .n {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-variant-numeric: tabular-nums;
+    display: block;
+  }
+
+  .split .k {
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+
+  .split .is-hot .n {
+    color: var(--accent);
+  }
+
+  .notes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .note-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .note-who {
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+
+  .note-when {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+
+  .note-text {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .note-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+    background: var(--panel-2);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tag.is-diff {
+    background: var(--gold-bg);
+    color: var(--gold);
+  }
+
+  .empty {
+    font-size: 13.5px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  .offline {
+    display: none;
+    font-size: 13px;
+    color: var(--warn);
+    background: var(--gold-bg);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 10px 12px;
+  }
+
+  .is-offline .offline {
+    display: block;
+  }
+
+  footer {
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    max-width: 70ch;
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Banc d'essai &middot; proto 0.1 &middot; 8 peluches</p>
+    <h1>CLAW-O-RAMA</h1>
+    <p class="lede">
+      Le prototype tourne pour de vrai ci-dessous&nbsp;: joue quelques parties, puis
+      remplis le relevé. Ce qui nous intéresse le plus&nbsp;:
+      <strong>est-ce que tu comprends pourquoi tu perds une peluche&nbsp;?</strong>
+      La prise n'est pas un tirage au sort — elle glisse, et ça doit se voir.
+    </p>
+  </header>
+
+  <div class="grid">
+    <section class="bay" aria-label="La borne">
+      <div class="marquee">
+        <span class="marquee-name">CLAW-O-RAMA</span>
+        <span class="marquee-meta" id="scale-note">&mdash;</span>
+      </div>
+      <div class="bay-fit" id="bay-fit">
+        <div class="stage" id="stage"><canvas id="screen"></canvas></div>
+      </div>
+      <p class="legend">
+        <span><b>&larr;</b> <b>&rarr;</b> déplacer</span>
+        <span><b>Espace</b> descendre</span>
+        <span><b>F3</b> debug</span>
+        <span>ou les trois boutons, au doigt</span>
+      </p>
+    </section>
+
+    <section class="log">
+      <div class="sheet">
+        <div class="sheet-head">
+          <h2>Relevé de service</h2>
+          <p class="eyebrow">Compteurs joints automatiquement</p>
+        </div>
+        <div class="sheet-body">
+          <dl class="meters" id="meters">
+            <div class="meter"><dt>Parties</dt><dd id="m-plays">0</dd></div>
+            <div class="meter"><dt>Gains</dt><dd id="m-wins">0</dd></div>
+            <div class="meter is-gold"><dt>Pièces</dt><dd id="m-coins">0</dd></div>
+            <div class="meter"><dt>Collection</dt><dd id="m-collected">0/8</dd></div>
+          </dl>
+
+          <form id="log-form" novalidate>
+            <div class="form-body">
+              <div class="field">
+                <label for="tester">Ton nom ou ton pseudo</label>
+                <input
+                  type="text"
+                  id="tester"
+                  name="tester"
+                  maxlength="40"
+                  autocomplete="nickname"
+                  placeholder="ex. Lou"
+                />
+              </div>
+
+              <div class="field" data-scale="feel">
+                <span class="field-label">La pince, au doigt&nbsp;: ça répond&nbsp;?</span>
+                <div class="scale" role="group" aria-label="Réactivité de la pince"></div>
+                <div class="scale-ends"><span>Mou, en retard</span><span>Immédiat</span></div>
+              </div>
+
+              <div class="field" data-scale="clarity">
+                <span class="field-label">Tu comprends pourquoi tu perds une peluche&nbsp;?</span>
+                <div class="scale" role="group" aria-label="Lisibilité de l'échec"></div>
+                <div class="scale-ends"><span>Jamais, c'est arbitraire</span><span>Toujours</span></div>
+              </div>
+
+              <div class="field" data-scale="replay">
+                <span class="field-label">Envie de relancer une partie&nbsp;?</span>
+                <div class="scale" role="group" aria-label="Envie de rejouer"></div>
+                <div class="scale-ends"><span>Aucune</span><span>J'arrete plus</span></div>
+              </div>
+
+              <div class="field" data-chips="difficulty">
+                <span class="field-label">Difficulté ressentie</span>
+                <div class="chips" role="group" aria-label="Difficulté ressentie"></div>
+              </div>
+
+              <div class="field">
+                <label for="notes">Ce qui accroche, ce qui coince</label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  maxlength="1200"
+                  placeholder="Le moment précis où tu as décroché, un bouton que tu as raté, une peluche impossible…"
+                ></textarea>
+                <span class="hint">
+                  Les compteurs ci-dessus (parties, gains, graine de la partie) sont joints
+                  au relevé, pour qu'on puisse rejouer exactement ta session.
+                </span>
+              </div>
+
+              <div class="submit-row">
+                <button type="submit" class="btn" id="submit">Déposer le relevé</button>
+                <span class="status" id="status"></span>
+              </div>
+
+              <p class="offline" id="offline">
+                Cette vue ne peut pas enregistrer de relevé — la base de l'artefact n'y est
+                est pas disponible. Le jeu reste jouable, mais ton retour ne partira pas.
+                Rouvre la page depuis la galerie des artefacts pour déposer un relevé.
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="sheet">
+        <div class="sheet-head">
+          <h2>Ce que disent les testeurs</h2>
+          <p class="eyebrow" id="count-note">Aucun relevé</p>
+        </div>
+        <div class="sheet-body" id="results">
+          <p class="empty" id="results-empty">
+            Le premier relevé déposé apparaîtra ici, en direct, pour tout le monde.
+          </p>
+          <div class="bars" id="bars" hidden></div>
+          <div class="split" id="split" hidden></div>
+          <div class="notes" id="notes-list" hidden></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    Les huit peluches (Pim, Zeb, Elira, Blip, Sir Cube, Gloop, Draka, Aurex) sont des
+    créations originales. Elles évoquent des archétypes du genre, sans reproduire de
+    personnage sous licence. Prototype&nbsp;: Canvas 2D, résolution virtuelle 180&times;320,
+    aucune dépendance, aucun fichier d'asset.
+  </footer>
+</div>
+
+<script type="module">
+  /*__GAME_BUNDLE__*/
+</script>
+
+<script type="module">
+  // --- ajustement de la borne ------------------------------------------
+  // Le jeu se met a l'echelle par un facteur ENTIER (ici x2, soit 360x640).
+  // Quand la place manque, on reduit la boite entiere par une transformation
+  // uniforme plutot que de laisser le facteur tomber a x1, ce qui donnerait
+  // une borne minuscule.
+  const stage = document.getElementById('stage');
+  const bayFit = document.getElementById('bay-fit');
+  const scaleNote = document.getElementById('scale-note');
+  const BOX_W = 360;
+  const BOX_H = 640;
+
+  function fitStage() {
+    const availW = bayFit.clientWidth;
+    const availH = Math.max(360, window.innerHeight - 150);
+    const fit = Math.min(1, availW / BOX_W, availH / BOX_H);
+    stage.style.transform = fit < 1 ? `scale(${fit})` : '';
+    bayFit.style.height = `${Math.round(BOX_H * fit)}px`;
+    scaleNote.textContent = `180 × 320 · x2`;
+  }
+
+  fitStage();
+  window.addEventListener('resize', fitStage);
+  window.addEventListener('orientationchange', fitStage);
+
+  // --- compteurs de la partie ------------------------------------------
+  const SCALE_KEYS = ['feel', 'clarity', 'replay'];
+  const DIFFICULTY = [
+    { id: 'facile', label: 'Trop facile' },
+    { id: 'juste', label: 'Juste' },
+    { id: 'dur', label: 'Trop dur' },
+  ];
+  const TOTAL_PRIZES = 8;
+
+  const el = (id) => document.getElementById(id);
+  const answers = { feel: 0, clarity: 0, replay: 0, difficulty: '' };
+
+  function claw() {
+    return window.__claw ?? null;
+  }
+
+  function telemetry() {
+    const handle = claw();
+    if (!handle) return { plays: 0, wins: 0, coins: 0, collected: 0, seed: 0 };
+    const s = handle.state;
+    return {
+      plays: s.plays | 0,
+      wins: s.wins | 0,
+      coins: s.coins | 0,
+      collected: Object.keys(s.collection || {}).length,
+      seed: s.seed | 0,
+    };
+  }
+
+  function paintMeters() {
+    const t = telemetry();
+    el('m-plays').textContent = String(t.plays);
+    el('m-wins').textContent = String(t.wins);
+    el('m-coins').textContent = String(t.coins);
+    el('m-collected').textContent = `${t.collected}/${TOTAL_PRIZES}`;
+  }
+
+  paintMeters();
+  setInterval(paintMeters, 700);
+
+  // --- controles de notation --------------------------------------------
+  for (const key of SCALE_KEYS) {
+    const host = document.querySelector(`[data-scale="${key}"] .scale`);
+    for (let n = 1; n <= 5; n++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = String(n);
+      b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-label', `${n} sur 5`);
+      b.addEventListener('click', () => {
+        answers[key] = n;
+        for (const sib of host.children) {
+          sib.setAttribute('aria-pressed', String(sib === b));
+        }
+      });
+      host.appendChild(b);
+    }
+  }
+
+  const chipHost = document.querySelector('[data-chips="difficulty"] .chips');
+  for (const opt of DIFFICULTY) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = opt.label;
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => {
+      answers.difficulty = opt.id;
+      for (const sib of chipHost.children) {
+        sib.setAttribute('aria-pressed', String(sib === b));
+      }
+    });
+    chipHost.appendChild(b);
+  }
+
+  // Le pseudo est une commodite locale : il ne quitte pas ce navigateur tant
+  // qu'aucun releve n'est depose.
+  const testerInput = el('tester');
+  try {
+    const saved = localStorage.getItem('claw-playtest:tester');
+    if (saved) testerInput.value = saved;
+  } catch {
+    /* stockage bloque : on continue sans */
+  }
+
+  // --- base partagee ------------------------------------------------------
+  const status = el('status');
+  const submitBtn = el('submit');
+  let db = null;
+
+  function setStatus(text, kind = '') {
+    status.textContent = text;
+    status.className = `status${kind ? ` is-${kind}` : ''}`;
+  }
+
+  const SCALE_LABELS = {
+    feel: 'La pince répond',
+    clarity: 'On comprend pourquoi on perd',
+    replay: 'Envie de relancer',
+  };
+
+  function renderResults(rows) {
+    const countNote = el('count-note');
+    const empty = el('results-empty');
+    const bars = el('bars');
+    const split = el('split');
+    const notes = el('notes-list');
+
+    if (rows.length === 0) {
+      countNote.textContent = 'Aucun relevé';
+      empty.hidden = false;
+      bars.hidden = split.hidden = notes.hidden = true;
+      return;
+    }
+
+    countNote.textContent = `${rows.length} relevé${rows.length > 1 ? 's' : ''}`;
+    empty.hidden = true;
+    bars.hidden = split.hidden = notes.hidden = false;
+
+    bars.replaceChildren();
+    for (const key of SCALE_KEYS) {
+      const scores = rows.map((r) => Number(r[key])).filter((n) => n >= 1 && n <= 5);
+      const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      const label = document.createElement('span');
+      label.className = 'bar-label';
+      label.textContent = SCALE_LABELS[key];
+      const value = document.createElement('span');
+      value.className = 'bar-value';
+      value.textContent = scores.length ? avg.toFixed(1) : '—';
+      const track = document.createElement('div');
+      track.className = 'bar-track';
+      const fill = document.createElement('div');
+      fill.className = 'bar-fill';
+      // Le remplissage part de 1/5 : une note de 1 est le plancher, pas le vide.
+      fill.style.width = `${scores.length ? ((avg - 1) / 4) * 100 : 0}%`;
+      track.appendChild(fill);
+      row.append(label, value, track);
+      bars.appendChild(row);
+    }
+
+    const tally = { facile: 0, juste: 0, dur: 0 };
+    for (const r of rows) if (r.difficulty in tally) tally[r.difficulty]++;
+    const top = Math.max(tally.facile, tally.juste, tally.dur);
+    split.replaceChildren();
+    for (const opt of DIFFICULTY) {
+      const cell = document.createElement('div');
+      if (tally[opt.id] === top && top > 0) cell.className = 'is-hot';
+      const n = document.createElement('span');
+      n.className = 'n';
+      n.textContent = String(tally[opt.id]);
+      const k = document.createElement('span');
+      k.className = 'k';
+      k.textContent = opt.label;
+      cell.append(n, k);
+      split.appendChild(cell);
+    }
+
+    notes.replaceChildren();
+    for (const r of rows) {
+      const card = document.createElement('div');
+      card.className = 'note';
+
+      const head = document.createElement('div');
+      head.className = 'note-head';
+      const who = document.createElement('span');
+      who.className = 'note-who';
+      who.textContent = String(r.tester || 'Anonyme').slice(0, 40);
+      const when = document.createElement('span');
+      when.className = 'note-when';
+      when.textContent = formatWhen(r.createdAt);
+      head.append(who, when);
+      card.appendChild(head);
+
+      if (r.notes) {
+        const text = document.createElement('p');
+        text.className = 'note-text';
+        text.textContent = String(r.notes).slice(0, 1200);
+        card.appendChild(text);
+      }
+
+      const tags = document.createElement('div');
+      tags.className = 'note-tags';
+      const diff = DIFFICULTY.find((d) => d.id === r.difficulty);
+      if (diff) tags.appendChild(makeTag(diff.label, 'is-diff'));
+      tags.appendChild(makeTag(`${Number(r.wins) || 0}/${Number(r.plays) || 0} parties gagnées`));
+      if (Number(r.collected)) tags.appendChild(makeTag(`${Number(r.collected)}/${TOTAL_PRIZES} peluches`));
+      if (Number(r.seed)) tags.appendChild(makeTag(`graine ${Number(r.seed)}`));
+      card.appendChild(tags);
+
+      notes.appendChild(card);
+    }
+  }
+
+  function makeTag(text, extra = '') {
+    const t = document.createElement('span');
+    t.className = `tag${extra ? ` ${extra}` : ''}`;
+    t.textContent = text;
+    return t;
+  }
+
+  function formatWhen(iso) {
+    const d = new Date(String(iso));
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  el('log-form').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!db) return;
+
+    if (!answers.feel || !answers.clarity || !answers.replay || !answers.difficulty) {
+      setStatus('Il manque une note ou la difficulté.', 'warn');
+      return;
+    }
+
+    const t = telemetry();
+    const payload = {
+      tester: testerInput.value.trim().slice(0, 40) || 'Anonyme',
+      feel: answers.feel,
+      clarity: answers.clarity,
+      replay: answers.replay,
+      difficulty: answers.difficulty,
+      notes: el('notes').value.trim().slice(0, 1200),
+      plays: t.plays,
+      wins: t.wins,
+      coins: t.coins,
+      collected: t.collected,
+      seed: t.seed,
+      createdAt: new Date().toISOString(),
+    };
+
+    submitBtn.disabled = true;
+    setStatus('Envoi…');
+    try {
+      await db.collection('feedback').add(payload);
+      try {
+        localStorage.setItem('claw-playtest:tester', payload.tester);
+      } catch {
+        /* stockage bloque */
+      }
+      el('notes').value = '';
+      setStatus('Relevé déposé. Merci.', 'good');
+    } catch (e) {
+      const code = e && e.code ? e.code : 'unavailable';
+      setStatus(
+        code === 'quota_exceeded'
+          ? 'La base est pleine : préviens l’équipe, aucun nouveau relevé ne rentre.'
+          : 'Le relevé n’est pas parti. Réessaie dans un instant.',
+        'warn',
+      );
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // La base arrive apres le premier tour de script : la page fonctionne sans,
+  // et s'allume quand elle repond.
+  submitBtn.disabled = true;
+  setStatus('Connexion à la base…');
+
+  const dbPromise = window.claude?.use
+    ? window.claude.use('db')
+    : Promise.resolve(null);
+
+  dbPromise.then((store) => {
+    if (!store) {
+      document.body.classList.add('is-offline');
+      setStatus('Dépôt indisponible dans cette vue.', 'warn');
+      return;
+    }
+    db = store;
+    submitBtn.disabled = false;
+    setStatus('');
+    db.collection('feedback')
+      .orderBy('createdAt', 'desc')
+      .limit(200)
+      .onSnapshot(
+        (snap) => renderResults(snap.docs.map((d) => d.data() ?? {})),
+        () => setStatus('Les relevés ne se rafraîchissent plus. Recharge la page.', 'warn'),
+      );
+  });
+</script>

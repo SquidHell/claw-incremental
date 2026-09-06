@@ -3,9 +3,15 @@
  *
  * ART ORIGINAL. Ce sont des mascottes inventees qui evoquent des ARCHETYPES du
  * genre (le plombier moustachu, la creature rapide, la princesse, le fantome,
- * le chevalier, le blob, le dragonnet, la relique doree) — pas des reproductions
- * de personnages sous licence. Aucun logo, aucune marque, aucune combinaison
- * forme/couleur distinctive d'une oeuvre existante, et des noms inventes.
+ * le chevalier, le blob, le dragonnet, la relique doree) — pas des
+ * reproductions de personnages sous licence. Aucun logo, aucune marque, aucune
+ * combinaison forme/couleur distinctive d'une oeuvre existante, et des noms
+ * inventes.
+ *
+ * Le parti pris graphique est la GUEULE : yeux desassortis, pupilles qui
+ * partent chacune de leur cote, dents du bonheur, langues qui pendent. Une
+ * peluche de machine a pince doit se lire et faire rire en 20x20, pas etre
+ * jolie.
  *
  * Pour mettre ton propre art : remplace la pixel-map ici, ou passe par
  * `loadSheet()` dans sprites.ts et pointe `PrizeDef.sprite` vers la frame.
@@ -14,16 +20,19 @@
  */
 import type { PixelArt } from '../sprites.ts';
 
-/** Pim — le petit plombier moustachu. */
+/** Pim — le plombier moustachu, yeux qui divergent et langue sortie. */
 export const pim: PixelArt = {
   palette: {
     K: '#241a2e',
     R: '#d83a2a',
     r: '#9c2418',
     S: '#f2c08a',
+    W: '#ffffff',
+    E: '#241a2e',
     M: '#6b3a1f',
+    T: '#e2607a',
     B: '#2a5bd7',
-    W: '#f4f4f4',
+    G: '#f4f4f4',
     Y: '#f7d354',
     N: '#7a4a22',
   },
@@ -32,18 +41,18 @@ export const pim: PixelArt = {
     '....KKRRRRRRRRKK....',
     '...KRRRRRRRRRRRRK...',
     '..KRRRRRRRRRRRRRRK..',
-    '..KRRRRRRRRRRRRRRK..',
+    '..KRRRRWWRRRRRRRRK..',
     '..KrrrrrrrrrrrrrrK..',
-    '..KSSSKKSSSSKKSSSK..',
-    '..KSSSKKSSSSKKSSSK..',
-    '..KSSSSSSSSSSSSSSK..',
-    '..KSSMMMMMMMMMMSSK..',
-    '..KSSMMSSSSSSMMSSK..',
-    '...KSSSSSSSSSSSSK...',
+    '..KSSWWWSSSSWWWSSK..',
+    '..KSSEWWSSSSWWESSK..',
+    '..KSSWWWSSSSWWWSSK..',
+    '..KSMMMMMMMMMMMMSK..',
+    '..KSMMMTTTTTTMMMSK..',
+    '...KSSSSTTTTSSSSK...',
     '....KKSSSSSSSSKK....',
-    '...KWWKBBBBBBKWWK...',
-    '..KWWWKBYBBYBKWWWK..',
-    '..KWWWKBBBBBBKWWWK..',
+    '...KGGKBBBBBBKGGK...',
+    '..KGGGKBYBBYBKGGGK..',
+    '..KGGGKBBBBBBKGGGK..',
     '...KKKKBBBBBBKKKK...',
     '......KBBBBBBK......',
     '.....KNNNKKNNNK.....',
@@ -51,41 +60,43 @@ export const pim: PixelArt = {
   ],
 };
 
-/** Zeb — la creature bleue veloce, echarpe au vent. */
+/** Zeb — la creature veloce. Yeux qui louchent chacun de leur cote, dents du bonheur. */
 export const zeb: PixelArt = {
   palette: {
     K: '#17233d',
     B: '#3aa7e8',
     W: '#ffffff',
     E: '#17233d',
+    P: '#ffe3b0',
+    T: '#ffffff',
+    M: '#7a2038',
     O: '#f28a2e',
-    S: '#ffe3b0',
   },
   rows: [
     '.....K....K...K.....',
     '....KBK..KBK.KBK....',
     '...KBBBKKBBBKKBBBK..',
     '..KBBBBBBBBBBBBBBK..',
-    '..KBBBBBBBBBBBBBBK..',
     '.KBBBBBBBBBBBBBBBBK.',
-    '.KBBWWWKBBBBKWWWBBK.',
-    '.KBBWEWKBBBBKWEWBBK.',
-    '.KBBWWWKBBBBKWWWBBK.',
-    '.KBBBBBBBKKBBBBBBBK.',
-    '..KBBBBKSSSSKBBBBK..',
-    '...KOOOOOOOOOOOOK...',
+    '.KBWWWWBBBBBBWWEWBK.',
+    '.KBWEWWBBBBBBWWWWBK.',
+    '.KBWWWWBBBBBBWWWWBK.',
+    '.KBBBBBBPPPPBBBBBBK.',
+    '.KBBBBKPPPPPPKBBBBK.',
+    '.KBBBKPTTKKTTPKBBBK.',
+    '.KBBBKPMMMMMMPKBBBK.',
+    '.KBBBKKPPPPPPKKBBBK.',
     '..KOOOOOOOOOOOOOOK..',
-    '..KBBKSSSSSSSSKBBK..',
-    '.KBBBKSSSSSSSSKBBBK.',
-    '.KBBBKSSSSSSSSKBBBK.',
-    '..KBBKSSSSSSSSKBBK..',
+    '..KBBKOOOOOOOOKBBK..',
+    '.KBBBKPPPPPPPPKBBBK.',
+    '.KBBBKPPPPPPPPKBBBK.',
+    '..KBBKPPPPPPPPKBBK..',
     '...KKKBBBBBBBBKKK...',
-    '......KWWKKWWK......',
-    '......KWWKKWWK......',
+    '.....KWWK..KWWK.....',
   ],
 };
 
-/** Elira — la princesse couronnee. */
+/** Elira — la princesse couronnee, regard qui converge et sourire trop large. */
 export const elira: PixelArt = {
   palette: {
     K: '#3a1f3d',
@@ -102,9 +113,9 @@ export const elira: PixelArt = {
     '...KHHHHHHHHHHHK....',
     '..KHHHHHHHHHHHHHK...',
     '..KHHHSSSSSSSSHHHK..',
-    '..KHHHSKKSSKKSHHHK..',
-    '..KHHHSSSSSSSSHHHK..',
-    '..KHHHSSSppSSSHHHK..',
+    '..KHHHKKSSSKKSHHHK..',
+    '..KHHHKKSSSKKSHHHK..',
+    '..KHHHSSppppSSHHHK..',
     '...KHHHHSSSSHHHHK...',
     '...KKHHHHHHHHHHKK...',
     '....KKPPPPPPPPKK....',
@@ -119,13 +130,15 @@ export const elira: PixelArt = {
   ],
 };
 
-/** Blip — le petit fantome timide. */
+/** Blip — le fantome ahuri : grands yeux depareilles, bouche ouverte, langue pendante. */
 export const blip: PixelArt = {
   palette: {
     K: '#2a2440',
     W: '#f6f6ff',
     w: '#ccccec',
     P: '#ff9ec4',
+    M: '#3a2038',
+    T: '#e2607a',
   },
   rows: [
     '.......KKKKKK.......',
@@ -134,14 +147,14 @@ export const blip: PixelArt = {
     '...KWWWWWWWWWWWWK...',
     '..KWWWWWWWWWWWWWWK..',
     '..KWWWWWWWWWWWWWWK..',
-    '..KWWKKWWWWWWKKWWK..',
-    '..KWWKKWWWWWWKKWWK..',
+    '..KWKKKWWWWWWKKKWWK.',
+    '..KWKKKWWWWWWKKKWWK.',
     '..KWWWWWWWWWWWWWWK..',
-    '..KWPPWWWKKKKWWPPWK.',
-    '..KWWWWWWWWWWWWWWK..',
-    '..KWWWWWWWWWWWWWWK..',
-    '..KWWWWWWWWWWWWWWK..',
-    '..KWWWWWWWWWWWWWWK..',
+    '..KPPWKKKKKKKKWPPWK.',
+    '..KWWWKMMMMMMMMKWWK.',
+    '..KWWWKMMTTTTMMKWWK.',
+    '..KWWWWKKTTTTKKWWWK.',
+    '..KWWWWWWKKKKWWWWWK.',
     '..KWwwwwwwwwwwwwWK..',
     '..KWwwwwwwwwwwwwWK..',
     '..KWwwwwwwwwwwwwWK..',
@@ -151,7 +164,7 @@ export const blip: PixelArt = {
   ],
 };
 
-/** Sir Cube — le chevalier cubique. */
+/** Sir Cube — le chevalier cubique. Une fente d'oeil large, l'autre minuscule. */
 export const sirCube: PixelArt = {
   palette: {
     K: '#1c2a1c',
@@ -169,7 +182,7 @@ export const sirCube: PixelArt = {
     '...KMMMMMMMMMMMMK...',
     '..KMMMMMMMMMMMMMMK..',
     '..KMKKKKKKKKKKKKMK..',
-    '..KMKYYKKKKKKYYKMK..',
+    '..KMKYYYKKKKKYKKMK..',
     '..KMKKKKKKKKKKKKMK..',
     '..KMMMMMMMMMMMMMMK..',
     '...KMMMMMMMMMMMMK...',
@@ -184,13 +197,14 @@ export const sirCube: PixelArt = {
   ],
 };
 
-/** Gloop — le blob gluant. */
+/** Gloop — le blob gluant, un gros oeil et un petit, bouche beante. */
 export const gloop: PixelArt = {
   palette: {
     K: '#14321e',
     G: '#7de08a',
     g: '#3fae5c',
     W: '#ffffff',
+    M: '#123a1e',
   },
   rows: [
     '........KKKK........',
@@ -201,12 +215,12 @@ export const gloop: PixelArt = {
     '..KGGGWWWGGGGGGGGK..',
     '..KGGGGWGGGGGGGGGK..',
     '.KGGGGGGGGGGGGGGGGK.',
-    '.KGGGKKGGGGGGKKGGGK.',
-    '.KGGKKKKGGGGKKKKGGK.',
-    '.KGGGKKGGGGGGKKGGGK.',
+    '.KGGKKKKGGGGGGKKGGK.',
+    '.KGGKKKKGGGGGGKKGGK.',
+    '.KGGGGGGGGGGGGGGGGK.',
+    '.KGGGGKKMMMMKKGGGGK.',
+    '.KGGGGGKMMMMKGGGGGK.',
     '.KGGGGGGKKKKGGGGGGK.',
-    '.KGGGGGGGGGGGGGGGGK.',
-    '.KGGGGGGGGGGGGGGGGK.',
     '.KggggggggggggggggK.',
     '.KggggggggggggggggK.',
     '.KggggggggggggggggK.',
@@ -216,7 +230,7 @@ export const gloop: PixelArt = {
   ],
 };
 
-/** Draka — le dragonnet aile (rare). */
+/** Draka — le dragonnet aile (rare), langue dehors et regard divergent. */
 export const draka: PixelArt = {
   palette: {
     K: '#241338',
@@ -226,6 +240,8 @@ export const draka: PixelArt = {
     O: '#ff9a3c',
     W: '#ffffff',
     E: '#241338',
+    M: '#3d1030',
+    T: '#e2607a',
   },
   rows: [
     '....K..........K....',
@@ -233,11 +249,11 @@ export const draka: PixelArt = {
     '...KOKKVVVVVVKKOK...',
     '..KVVVVVVVVVVVVVVK..',
     '.KVVVVVVVVVVVVVVVVK.',
-    '.KVVWWKVVVVVVKWWVVK.',
-    '.KVVWEKVVVVVVKEWVVK.',
-    '.KVVVVVVVVVVVVVVVVK.',
-    '.KVVVKKYYYYYYKKVVVK.',
-    '..KVVVKYYYYYYKVVVK..',
+    '.KVVWWWKVVVVKWWWVVK.',
+    '.KVVEWWKVVVVKWWEVVK.',
+    '.KVVWWWKVVVVKWWWVVK.',
+    '.KVVVKKMMMMMMKKVVVK.',
+    '..KVVVKMTTTTMKVVVK..',
     'KKKVVVKYYYYYYKVVVKKK',
     'KvvKVVKYYYYYYKVVKvvK',
     'KvvKVVKYYYYYYKVVKvvK',
@@ -251,13 +267,12 @@ export const draka: PixelArt = {
   ],
 };
 
-/** Aurex — la relique doree (legendaire). */
+/** Aurex — la relique doree (legendaire). Paupieres lourdes et rictus en coin. */
 export const aurex: PixelArt = {
   palette: {
     K: '#4a3208',
     Y: '#ffd94a',
     y: '#d9a520',
-    W: '#fff6cf',
   },
   rows: [
     '.........KK.........',
@@ -266,10 +281,10 @@ export const aurex: PixelArt = {
     '.......KYYYYK.......',
     'KKKKKKKYYYYYYKKKKKKK',
     'KYYYYYYYYYYYYYYYYYYK',
-    'KYYWWYYYYYYYYYYWWYYK',
-    '.KYYKKYYYYYYYYKKYYK.',
-    '..KYYYYYYKKYYYYYYK..',
+    'KYYKKKYYYYYYYYKKKYYK',
+    '.KYKKKYYYYYYYYKKKYK.',
     '..KYYYYYYYYYYYYYYK..',
+    '..KYYYKKKKYYYYYYYK..',
     '...KYYYYYYYYYYYYK...',
     '...KYYYYYYYYYYYYK...',
     '..KYYYYYYYYYYYYYYK..',
